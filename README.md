@@ -4,6 +4,8 @@ Predict where vehicles and pedestrians will be over the next three seconds using
 
 **Current stage: learning and planning on Mac. Implementation will happen on Windows.** The research and proposed design are documented; no data has been collected and no model has been trained. Numerical settings are proposals, not measured results.
 
+**[Open the interactive visual companion](companion.html)** — download/open this single HTML file in a browser. Explore alignment, network shapes, training and prediction errors offline; all example results are explicitly synthetic.
+
 ## Start here
 
 1. **[LEARNING.md](LEARNING.md)** — what to read/watch next, in order. Start here now.
@@ -27,7 +29,10 @@ Follow the reading order in [LEARNING.md](LEARNING.md). Finish its short readine
 README.md       Overview and next action
 LEARNING.md     Reading/watch order
 ROADMAP.md      Phases and completion criteria
+companion.html  Interactive visual guide (open directly in a browser)
 docs/           Detailed specifications, research and references
 ```
 
 This repository remains the single source of truth. Code and data folders will be created when their phase begins, rather than left empty now. Large datasets/checkpoints must have versioned manifests or an agreed storage mechanism; see the [repository policy](docs/repository-structure.md).
+
+When architecture, data contracts, metrics or phase status change, update `companion.html` in the same change. Keep its embedded contract consistent with the specification and distinguish proposed settings, implemented behavior and measured results.

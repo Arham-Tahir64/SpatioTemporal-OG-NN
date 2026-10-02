@@ -70,3 +70,5 @@ Semantic vehicle/pedestrian heads, learned pillars, state estimation, backward f
 ## 7. Cross-document authority
 
 This file owns scope and requirements. [Architecture](architecture.md) owns tensor/frame contracts; [dataset strategy](dataset-strategy.md) owns labels/splits; [evaluation](evaluation-strategy.md) owns metric and promotion rules; [experiment plan](experiment-plan.md) owns comparisons. Change a contract through an [ADR](decisions/README.md), update all affected documents, and increment its schema version. Archive results under the contract used; do not silently reinterpret them.
+
+The [interactive companion](../companion.html) is the visual counterpart of these contracts. Update its embedded settings, diagrams and phase status in the same change as the owning documents. Synthetic teaching examples must stay explicitly labeled; measured predictions require artifact provenance.
