@@ -59,3 +59,9 @@ The [experiment plan](../experiments/experiment-plan.md) turns unresolved choice
 ## Documentation validation
 
 Checked all 104 relative Markdown links present at validation, 44 unique catalog IDs, proposed JSON tensor/grid/timestamp arithmetic, and byte-for-byte preservation of the supplied proposal. The archived proposal SHA-256 is `94acf56e20743087b4dc4297d4494c03470ddda57d2a4a26763dcf9d5585982c`. These are documentation/contract checks, not implementation tests or scientific validation. External sources were inspected through browsing as described above; no blanket claim is made that every outbound link will remain available.
+
+## 2026-10-02 — User-suggested mapping resources
+
+Added R45–R51 and a focused reading guide. Inspected both blog texts, TempleRAIL README and selected log-odds/ray/data-loading code, official lecture metadata/course pages, and the SOGMP primary publication/implementation entry points. The lecture was not watched end-to-end, and repositories were not executed. Flagged the Medium spatial-factorization/temporal-update conflation and separated the mapper from its associated forecasting model. Blog assessments refer to the authors' own text; mathematical recommendations rely on the university mapping material and explicit derivation. The original 44-reference validation above describes the earlier snapshot; this catalog now has 51 entries.
+
+The SOGMP README identified the 2025 SCOPE continuation; its official repository README was inspected and linked as an optional follow-up. No local performance or Windows compatibility claim was made.

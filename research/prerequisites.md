@@ -4,6 +4,8 @@ Use this as a sequence of skills to demonstrate, not a reading checklist. Depth 
 
 Every R-number links to the [reference catalog](references.md), which contains primary links, focus areas and priorities. “Required” below refers to when a skill is needed.
 
+For a focused starting sequence using the suggested blogs, Chebrolu lecture and TempleRAIL code, follow the [occupancy-mapping reading order](occupancy-mapping-reading-order.md).
+
 ## Minimum path to the first dataset
 
 | Prerequisite | What it is / why it matters | Required depth and concepts | Learning resource / concrete exit exercise |

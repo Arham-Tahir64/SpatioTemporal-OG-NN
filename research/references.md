@@ -76,6 +76,20 @@ Research snapshot: 2026-10-01. **Required** means necessary for the next relevan
 | R43 Optional technical blog | [Waymo: How we built a scalable autonomous driver](https://waymo.com/blog/2022/05/howwevebuiltascalableautonomousdriver/) (2022) | Official engineering overview of a driving system | Read perception/prediction/planning context; helps position the forecaster within a larger stack, not derive tensor specifications |
 | R44 Recommended technical blog | [Wayve: Predicting the future from monocular cameras in BEV](https://wayve.ai/thinking/predicting-the-muture-from-monocular-cameras-in-birds-eye-view/) | Author-side visual explanation of FIERY | Use the illustrations to understand multiple futures; rely on the paper for exact objective and causal inference details |
 
+## Added mapping resources — 2026-10-02
+
+| ID / priority | Resource | Focus and project use |
+|---|---|---|
+| R45 Optional overview | [Think Autonomous occupancy mapping](https://www.thinkautonomous.ai/blog/occupancy-grid-mapping/) | Visual introduction; see distinctions and caveats in the reading guide |
+| R46 Optional recap | [Naren Suri occupancy mapping](https://medium.com/@SuriNaren/occupancy-grid-mapping-algorithm-e451701da0e8) | Worked examples; mathematical caveats documented in the reading guide |
+| R47 Required | [Chebrolu MSR 03 lecture](https://www.youtube.com/watch?v=x_Ah685BFEQ) | Main known-pose mapping foundation |
+| R48 Recommended | [TempleRAIL PyTorch mapper](https://github.com/TempleRAIL/occupancy_grid_mapping_torch) | Reference mapping code; inspect before adaptation |
+| R49 Recommended | [Xie & Dames, Stochastic Occupancy Grid Map Prediction in Dynamic Scenes](https://proceedings.mlr.press/v229/xie23a.html), [SOGMP code](https://github.com/TempleRAIL/SOGMP) (CoRL 2023) | Bridge from map construction to stochastic future prediction; a variational model, not our direct-map baseline |
+| R50 Required if probability needs review | [Bonn online robotics: Probability Primer / Bayes Filter](https://www.ipb.uni-bonn.de/online-training-robotics/) | Prerequisite before the mapping lecture |
+| R51 Optional continuation | [SCOPE, official repository](https://github.com/TempleRAIL/scope) (T-RO 2025) | Author-designated continuation of SOGMP; inspect before a forecasting-code adoption decision, not required for basic mapping |
+
+Follow the [ordered reading guide](occupancy-mapping-reading-order.md) rather than consuming these as an unordered list.
+
 ## How to maintain this catalog
 
 Add a stable ID, title/year, primary URL, paper/code distinction, priority, focus, implementation consequence and inspection status in the research log. Link the experiment/ADR that used it. Do not copy entire papers into the repository. Record author code commit and LICENSE when actually importing or running it. Keep superseded sources with a note; a new leaderboard result alone is not a reason to change the baseline.
