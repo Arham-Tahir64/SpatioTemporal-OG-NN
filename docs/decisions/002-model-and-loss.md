@@ -4,7 +4,7 @@ Status: selected v1 default, empirical comparison pending.
 
 **Context:** six aligned frames at 128×128 allow several plausible temporal models; hardware and dataset scale are not yet measured.
 
-**Evidence:** U-Net offers a simple dense decoder; MotionNet motivates efficient temporal BEV processing; FIERY and ConvLSTM motivate recurrence/stochastic extensions. Calibration literature separates probability quality from classification overlap. See R07/R08/R10/R11/R33 in the [catalog](../../research/references.md).
+**Evidence:** U-Net offers a simple dense decoder; MotionNet motivates efficient temporal BEV processing; FIERY and ConvLSTM motivate recurrence/stochastic extensions. Calibration literature separates probability quality from classification overlap. See R07/R08/R10/R11/R33 in the [catalog](../references.md).
 
 **Decision:** four evidence channels × six frames, channel-stacked 2D U-Net, direct four-horizon binary logits, optional current head weighted 0.25. Unweighted masked BCE first, with per-horizon probability evaluation. GroupNorm avoids relying on large batches. Compare shared-encoder temporal convolution and ConvGRU after baseline validation.
 

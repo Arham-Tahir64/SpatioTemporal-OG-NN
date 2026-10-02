@@ -4,7 +4,7 @@ Use this as a sequence of skills to demonstrate, not a reading checklist. Depth 
 
 Every R-number links to the [reference catalog](references.md), which contains primary links, focus areas and priorities. “Required” below refers to when a skill is needed.
 
-For a focused starting sequence using the suggested blogs, Chebrolu lecture and TempleRAIL code, follow the [occupancy-mapping reading order](occupancy-mapping-reading-order.md).
+For a focused starting sequence using the suggested blogs, Chebrolu lecture and TempleRAIL code, follow the [occupancy-mapping reading order](../LEARNING.md).
 
 ## Minimum path to the first dataset
 
@@ -30,7 +30,7 @@ For a focused starting sequence using the suggested blogs, Chebrolu lecture and 
 | CNNs and dense prediction | Spatial filters infer footprints from sparse geometric evidence | D3: convolution, padding/stride, receptive field, skip connections, normalization, upsampling | [R06/R07](references.md): calculate each tensor shape and show localization loss from downsampling |
 | Loss design and imbalance | Mostly empty scenes make trivial predictions attractive | D2/D3: logits BCE, weighting, focal, Dice/IoU surrogates, masks and reduction denominators | [R31/R32](references.md): derive weighted-BCE optimum, test all-empty/no-valid batches, ensure invalid cells have zero gradient |
 | Evaluation and uncertainty | Probabilities and overlap require different evidence | D3: confusion counts, PR curves, proper scores, Brier/NLL, calibration, threshold selection | [R33/R34](references.md): all-empty predictor appears accurate but has zero occupied recall; draw reliability plots |
-| Experimental design | Apparent improvement may be leakage, seed noise or extra compute | D3: grouped splits, paired comparisons, cluster bootstrap, matched budgets, test isolation | [evaluation protocol](../docs/evaluation-strategy.md): identify why random overlapping-window split is invalid; create reproducible run card |
+| Experimental design | Apparent improvement may be leakage, seed noise or extra compute | D3: grouped splits, paired comparisons, cluster bootstrap, matched budgets, test isolation | [evaluation protocol](evaluation-strategy.md): identify why random overlapping-window split is invalid; create reproducible run card |
 | Classical tracking and kinematics | Gives a baseline that tests learned motion rather than perception alone | D2/D3: CV state transition, Kalman filtering, nearest/gated association, covariance, yaw and rigid transforms | [R02/R05/R12](references.md): two moving clusters with one missed observation; compare sensor and oracle CV |
 
 ## Before temporal and dynamic modeling
@@ -55,7 +55,7 @@ For a focused starting sequence using the suggested blogs, Chebrolu lecture and 
 | Aleatoric/epistemic uncertainty | Uncertain future behavior and uncertain model knowledge differ | D2: calibration, ensembles, distribution shift, conditional latent variables, coverage versus diversity | [R33/R34/R11](references.md): distinguish several plausible turning futures from random pixel noise |
 | World models | Learn scene evolution, potentially conditional on ego actions | D1 initially; D3 only on separate branch: VQ tokenization, autoregression, latent state, causal attention, rollout drift | [R26/R27/R29](references.md): separate input-perception, reconstruction and rollout errors |
 | Real-time deployment | Runtime includes data age, preprocessing and memory transfers | D3: profiling, batching versus latency, mixed precision, export, queues, pinned memory, numerical parity | [R35/R36](references.md): report batch-1 p95 wall time and prediction age on Windows |
-| Robotics/planning interface | Converts grids into time-aligned costs for an ego footprint | D2: coordinate/time metadata, footprint convolution, swept volumes, unknown-space policy, expected cost versus collision probability | [architecture planning interface](../docs/architecture.md): score a fixed trajectory while accounting for footprint and horizon gaps |
+| Robotics/planning interface | Converts grids into time-aligned costs for an ego footprint | D2: coordinate/time metadata, footprint convolution, swept volumes, unknown-space policy, expected cost versus collision probability | [architecture planning interface](architecture.md): score a fixed trajectory while accounting for footprint and horizon gaps |
 | Domain shift and reproducibility | Simulator success may not transfer to real sensing/behavior | D2/D3: stratified evaluation, sensor noise, calibration shift, dataset versioning, frozen adapters | [R21/R28](references.md): compare label timing and sensor distributions before interpreting transfer failure |
 
 ## Mathematical checkpoints

@@ -6,7 +6,7 @@ Status: Windows implementation confirmed by user; storage and exact versions pen
 
 **Decision:** preserve original proposal unchanged; implement CARLA collection/training on Windows in separate environments; use complete simulator actor labels with sensor-only model inputs; split whole scenario/replay groups before windows. Version all definitions/configs/metrics and artifact manifests in Git; keep large binary payloads at documented repository paths with an explicit LFS/backing-store policy.
 
-**Evidence:** CARLA synchronization and sensor documentation support frame-indexed collection; nuScenes illustrates that sensor and annotation timestamps can differ. See R21/R37–R40 in the [catalog](../../research/references.md).
+**Evidence:** CARLA synchronization and sensor documentation support frame-indexed collection; nuScenes illustrates that sensor and annotation timestamps can differ. See R21/R37–R40 in the [catalog](../references.md).
 
 **Alternatives:** randomly split windows creates overlap leakage; importing a full research framework before validating the data raises compatibility costs; ordinary Git for large sensor logs harms repository usability.
 

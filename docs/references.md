@@ -88,7 +88,7 @@ Research snapshot: 2026-10-01. **Required** means necessary for the next relevan
 | R50 Required if probability needs review | [Bonn online robotics: Probability Primer / Bayes Filter](https://www.ipb.uni-bonn.de/online-training-robotics/) | Prerequisite before the mapping lecture |
 | R51 Optional continuation | [SCOPE, official repository](https://github.com/TempleRAIL/scope) (T-RO 2025) | Author-designated continuation of SOGMP; inspect before a forecasting-code adoption decision, not required for basic mapping |
 
-Follow the [ordered reading guide](occupancy-mapping-reading-order.md) rather than consuming these as an unordered list.
+Follow the [ordered reading guide](../LEARNING.md) rather than consuming these as an unordered list.
 
 ## How to maintain this catalog
 

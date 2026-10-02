@@ -1,12 +1,29 @@
 # Phased implementation roadmap
 
-Planning is on macOS; implementation is on Windows. No code below exists yet unless a README is explicitly noted. Paths name planned modules. Advance by evidence gates, not elapsed weeks. The original 8–10-week estimate may fit a narrow demo for an experienced developer; it is not a reliable estimate for all extensions.
+Planning is on macOS; implementation is on Windows. The module paths below are future implementation tasks; create them only when their phase begins. Advance by evidence gates, not elapsed weeks. The original 8–10-week estimate may fit a narrow demo for an experienced developer; it is not a reliable estimate for all extensions.
+
+## At a glance
+
+**You are here: Phase 0, learning and planning.** Begin with [LEARNING.md](LEARNING.md). On Mac, focus on reading, hand-worked exercises and documenting decisions; Windows setup and executable checks happen when implementation starts.
+
+| Phase | Milestone |
+|---|---|
+| [0 — Foundations](#phase-0--foundations-and-contract-freeze) | Understand the task; validate environment and geometry |
+| [1 — Data](#phase-1--synchronized-data-and-visualization) | Trust the synchronized inputs and labels |
+| [2 — Baselines](#phase-2--evaluation-harness-and-classical-baselines) | Establish honest comparisons |
+| [3 — Single frame](#phase-3--single-frame-current-occupancy-and-forecast-controls) | Get the simplest learned model working |
+| [4 — Temporal model](#phase-4--temporal-actor-occupancy-forecasting-v1) | Complete the first useful offline prototype |
+| [5 — Extensions](#phase-5--targeted-dynamicadvanced-experiments) | Optional experiments addressing measured failures |
+| [6 — Evaluation](#phase-6--frozen-evaluation-calibration-and-optimization) | Measure accuracy, calibration and speed |
+| [7 — Demo](#phase-7--replay-demo-live-integration-and-handoff) | Reproduce and inspect predictions on Windows |
+
+**Focus on one phase at a time.** Phase 4 is a sensible first finish line; Phase 5 is optional. The details below preserve the tasks, experiments, dependencies, failure modes and completion gates for later use.
 
 ## Phase 0 — Foundations and contract freeze
 
 **Objective:** make the task and geometry unambiguous before collecting training data.
 
-**Learn:** required geometry/probability/synchronization sections of the [prerequisite roadmap](../research/prerequisites.md), then MotionNet's representation and occupancy-flow task distinctions.
+**Learn:** required geometry/probability/synchronization sections of the [prerequisite roadmap](docs/prerequisites.md), then MotionNet's representation and occupancy-flow task distinctions.
 
 **Tasks:** choose Windows hardware and matched CARLA server/client release; confirm GPU backend; freeze eligible classes, coordinate/grid/label conventions and storage budget; build analytic geometry/ray/polygon fixtures; record environment and remaining decisions. No large dependency framework required.
 
@@ -36,7 +53,7 @@ Planning is on macOS; implementation is on Windows. No code below exists yet unl
 
 **Expected outputs:** 8–12 pilot episodes, manifest, window index, QA plots, six-history/four-future contact sheet and replay.
 
-**Evaluation / done:** all [dataset QA checks](dataset-strategy.md) pass; inspect at least 20 diverse windows; stationary landmarks align; boxes retain correct motion; exact +0.5 s targets; zero split-group overlap. Document raw bytes/second before scaling.
+**Evaluation / done:** all [dataset QA checks](docs/dataset-strategy.md) pass; inspect at least 20 diverse windows; stationary landmarks align; boxes retain correct motion; exact +0.5 s targets; zero split-group overlap. Document raw bytes/second before scaling.
 
 **Dependencies:** Phase 0. **Common failures:** labels collected from the wrong world tick; ground deletion before ray processing; future data entering inputs; label generation ignores box offsets or actors entering ROI.
 

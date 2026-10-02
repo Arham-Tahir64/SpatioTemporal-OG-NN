@@ -1,5 +1,26 @@
-# Project documentation
+# Technical reference shelf
 
-Start with the [specification](project-specification.md), then the [architecture](architecture.md) and [roadmap](implementation-roadmap.md). The [dataset](dataset-strategy.md) and [evaluation](evaluation-strategy.md) contracts must be frozen before benchmark collection/training.
+These are supporting documents, not a second reading list. Start with [LEARNING](../LEARNING.md) and follow [ROADMAP](../ROADMAP.md); open a document here when you need its details.
 
-[Decisions](decisions/README.md) explain the defaults; [open questions](open-questions.md) identify remaining validation gates; [repository structure](repository-structure.md) defines artifact ownership. The [original plan](archive/original-project-plan.md) is preserved as historical source material.
+| When you need… | Read |
+|---|---|
+| More depth on a prerequisite | [Learning topics and exercises](prerequisites.md) |
+| The exact goal, scope and critique of the original idea | [Project specification](project-specification.md) |
+| Tensor sizes, coordinate frames, model and loss | [Architecture](architecture.md) |
+| Collection, labels, splits and data QA | [Dataset strategy](dataset-strategy.md) |
+| Metrics, baselines and success criteria | [Evaluation strategy](evaluation-strategy.md) |
+| A fair comparison between design choices | [Experiment plan](experiment-plan.md) and [run template](run-card-template.md) |
+| What the papers contribute | [Literature review](literature-review.md) |
+| A paper, lecture, video or repository link | [Reference catalog](references.md) |
+
+<details>
+<summary>Design records, provenance and repository policy</summary>
+
+- [Architecture decisions](decisions/README.md): why the current defaults were selected.
+- [Open questions](open-questions.md): choices that still need evidence.
+- [Proposed settings](v1-proposed.json): machine-readable design contract, not runnable training configuration.
+- [Repository policy](repository-structure.md): where future files belong and how artifacts are tracked.
+- [Research log](research-log.md): what was inspected and the limits of the evidence.
+- [Original proposal](archive/original-project-plan.md): preserved unchanged as historical source material. The revised specification governs the plan.
+
+</details>

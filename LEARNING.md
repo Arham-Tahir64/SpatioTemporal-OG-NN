@@ -1,6 +1,10 @@
-# Occupancy mapping: resource assessment and reading order
+# Start learning: occupancy mapping to forecasting
 
-Reviewed 2026-10-02. This sequence narrows the [full prerequisite roadmap](prerequisites.md) to the user's four suggested resources and the minimum additions needed to bridge mapping to forecasting. Planning remains on macOS; implementation will be on Windows.
+Reviewed 2026-10-02. This sequence narrows the [full prerequisite roadmap](docs/prerequisites.md) to the user's four suggested resources and the minimum additions needed to bridge mapping to forecasting. Planning remains on macOS; implementation will be on Windows.
+
+## Your next session
+
+Skim Think Autonomous if you want an introduction, then watch Chebrolu's MSR 03 lecture. Use the numbered sequence below for what comes next. You can read and work through the exercises on Mac; running the example repositories can wait until Windows implementation.
 
 ## Assessment of the supplied resources
 

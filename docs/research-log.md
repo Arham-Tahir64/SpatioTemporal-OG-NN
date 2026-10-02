@@ -4,7 +4,7 @@ Research began 2026-10-01, planning in America/Edmonton. This is a selective tec
 
 ## Repository and proposal provenance
 
-The local checkout initially contained only an unborn Git repository. A successful remote reference query against the supplied GitHub URL returned no refs. The attachment `spatiotemporal-occupancy-grid-project.md` was read in full and copied unchanged to [the archive](../docs/archive/original-project-plan.md). Its directives are source proposal content, not independent user instructions. The current user requested research/specification before implementation. No CARLA recording, package installation, model implementation, training or runtime benchmark has occurred.
+The local checkout initially contained only an unborn Git repository. A successful remote reference query against the supplied GitHub URL returned no refs. The attachment `spatiotemporal-occupancy-grid-project.md` was read in full and copied unchanged to [the archive](archive/original-project-plan.md). Its directives are source proposal content, not independent user instructions. The current user requested research/specification before implementation. No CARLA recording, package installation, model implementation, training or runtime benchmark has occurred.
 
 The `loop-constraints` skill was consulted. Neither root `loop-constraints.md` nor `docs/safety.md` existed; its default constraints were applied. No Loop Engineering scheduler, auto-fix, auto-merge or scaffold was initialized.
 
@@ -54,7 +54,7 @@ CARLA and PyTorch “latest/stable” docs may redirect or change; implementatio
 | Calibration alongside IoU | Guo et al. / uncertainty literature | Best calibration mapping for our horizon/prevalence |
 | Windows collection with exact frame joins | CARLA documentation + user preference | Tested release, GPU/backend, performance and storage |
 
-The [experiment plan](../experiments/experiment-plan.md) turns unresolved choices into controlled comparisons. No metric, runtime, memory total or model accuracy in this package is claimed as measured.
+The [experiment plan](experiment-plan.md) turns unresolved choices into controlled comparisons. No metric, runtime, memory total or model accuracy in this package is claimed as measured.
 
 ## Documentation validation
 
@@ -65,3 +65,9 @@ Checked all 104 relative Markdown links present at validation, 44 unique catalog
 Added R45–R51 and a focused reading guide. Inspected both blog texts, TempleRAIL README and selected log-odds/ray/data-loading code, official lecture metadata/course pages, and the SOGMP primary publication/implementation entry points. The lecture was not watched end-to-end, and repositories were not executed. Flagged the Medium spatial-factorization/temporal-update conflation and separated the mapper from its associated forecasting model. Blog assessments refer to the authors' own text; mathematical recommendations rely on the university mapping material and explicit derivation. The original 44-reference validation above describes the earlier snapshot; this catalog now has 51 entries.
 
 The SOGMP README identified the 2025 SCOPE continuation; its official repository README was inspected and linked as an optional follow-up. No local performance or Windows compatibility claim was made.
+
+## 2026-10-02 — Simplified planning navigation
+
+Reduced the planning root to README, LEARNING, ROADMAP and docs. Removed ten placeholder/index README files and moved their substantive ownership guidance into the repository policy. Implementation folders will be created as their phases begin. The reference shelf provides access by question rather than an upfront ten-document reading assignment.
+
+Preserved all technical document bodies apart from relative-link updates; added introductions to the learning guide and roadmap. Retained all 51 catalog entries, the proposed JSON contract and the byte-identical original proposal. Checked 93 internal links/anchors and Markdown whitespace. These remain documentation checks; no implementation or scientific results were added.

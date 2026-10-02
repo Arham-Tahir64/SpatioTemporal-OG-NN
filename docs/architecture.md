@@ -1,6 +1,6 @@
 # Proposed v1 architecture
 
-All exact sizes and hyperparameters are engineering defaults to validate. See [reference catalog](../research/references.md) for evidence and [ADRs](decisions/README.md) for decisions.
+All exact sizes and hyperparameters are engineering defaults to validate. See [reference catalog](references.md) for evidence and [ADRs](decisions/README.md) for decisions.
 
 ## End-to-end pipeline
 

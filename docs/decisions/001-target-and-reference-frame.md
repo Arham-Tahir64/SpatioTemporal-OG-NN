@@ -4,7 +4,7 @@ Status: selected v1 default, pending geometry/label QA.
 
 **Context:** “occupancy” can mean observed returns, solid geometry, selected actor footprints, current reconstruction or future prediction. An ambiguous label makes loss and metric comparisons meaningless.
 
-**Evidence:** MotionNet separates motion/state/category; Cam4DOcc explicitly compares inflated versus fine geometry; Occ3D exposes visibility masks. See R10/R14/R19 in the [catalog](../../research/references.md).
+**Evidence:** MotionNet separates motion/state/category; Cam4DOcc explicitly compares inflated versus fine geometry; Occ3D exposes visibility masks. See R10/R14/R19 in the [catalog](../references.md).
 
 **Decision:** binary union of supported vehicle and pedestrian box footprints, including stopped actors, excluding ego; all horizons in one gravity-aligned current ego frame; 64 m square, 0.5 m cells. Unknown sensor evidence is independent of target validity. Zero means no supported actor, never globally free.
 

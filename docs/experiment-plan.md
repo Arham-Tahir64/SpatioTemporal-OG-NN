@@ -1,6 +1,6 @@
 # Experiment and ablation plan
 
-No runs have been executed. IDs below are pre-registered comparisons; expected outcomes are hypotheses. Use the fixed [evaluation protocol](../docs/evaluation-strategy.md) and [dataset contract](../docs/dataset-strategy.md).
+No runs have been executed. IDs below are pre-registered comparisons; expected outcomes are hypotheses. Use the fixed [evaluation protocol](evaluation-strategy.md) and [dataset contract](dataset-strategy.md).
 
 ## Common controls
 

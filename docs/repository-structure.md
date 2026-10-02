@@ -1,60 +1,32 @@
 # Repository structure and source-of-truth policy
 
-The project root is the canonical home for authored code, specs, notes, data definitions, experiments and results. Current directories contain documentation only. The tree below is the **intended implementation layout**, not a claim these modules already exist.
+The repository is the canonical home for project knowledge and reproducibility records. During planning it has only three entry documents and one documentation folder:
 
 ```text
-SpatioTemporal-OG-NN/
-  README.md
-  docs/
-    project-specification.md
-    architecture.md
-    dataset-strategy.md
-    evaluation-strategy.md
-    implementation-roadmap.md
-    repository-structure.md
-    open-questions.md
-    decisions/                    # numbered ADRs
-    archive/original-project-plan.md
-    environment-windows.md        # create after environment validation
-    demo.md                       # create with working demo
-  research/
-    prerequisites.md
-    literature-review.md
-    references.md                 # stable resource IDs and reading priorities
-    research-log.md                # inspected evidence and limits
-  src/stognn/                     # one importable package; create in implementation
-    data/                         # schemas, recorder, windows, labels, loaders
-    geometry/                     # frames, grid, ground, rays, rasterization
-    models/                       # encoders, fusion, heads
-    baselines/                    # persistence, tracking, constant velocity
-    training/                     # engine, losses, checkpointing
-    evaluation/                   # metrics, slices, calibration, bootstrap
-    visualization/                # BEV panels and replay
-    deployment/                   # inference, buffering, export, adapters
-  configs/
-    data/ models/ training/ evaluation/ deployment/
-  datasets/
-    README.md
-    manifests/ splits/            # small versioned definitions and hashes
-    fixtures/                     # tiny redistributable test cases
-    raw/ processed/               # bulk data; versioned via LFS/manifest policy
-  models/
-    cards/ manifests/             # metadata and evaluation links
-    checkpoints/                  # large artifacts, not Python model source
-  experiments/
-    experiment-plan.md
-    run-card-template.md
-    E03/<run-id>/                  # resolved config, notes, metrics, figures
-  training/                       # operating recipes; implementation stays in src
-  evaluation/
-    reports/                      # final benchmark tables and failure galleries
-  visualization/
-    examples/                     # curated small renders/demo manifests
-  scripts/                        # thin Windows PowerShell / Python entrypoints
-  tests/                          # meaningful invariant/integration tests
-  pyproject.toml                  # add with code, not a fake working package now
-  environment*.lock              # generate from tested environments later
+README.md       Project overview and next action
+LEARNING.md     Ordered resources and readiness exercises
+ROADMAP.md      Phases, tasks and completion gates
+docs/           Detailed contracts, research, decisions and original proposal
 ```
+
+The [reference shelf](README.md) indexes the details by the question they answer. Research sources retain stable catalog IDs; new conclusions should connect to a decision or experiment instead of accumulating disconnected notes.
+
+## Grow the repository only when needed
+
+The following are future destinations, not folders to scaffold now. The roadmap names individual modules at the phase where they become useful.
+
+| Create when | Destination and responsibility |
+|---|---|
+| Phase 0 implementation | `src/stognn/geometry/`, `tests/`, `configs/`: geometry, invariant tests and executable settings; record the tested environment in `docs/environment-windows.md` |
+| Phase 1 | `src/stognn/data/` and `src/stognn/visualization/`; `datasets/manifests/`, `splits/`, `fixtures/`, `raw/`, `processed/`: collection, labels, small QA fixtures and tracked data identities |
+| Phase 2 | `src/stognn/baselines/`, `src/stognn/evaluation/`, `experiments/<experiment-id>/<run-id>/`: comparisons, resolved settings, metrics and interpretation |
+| Phase 3 onward | `src/stognn/models/`, `src/stognn/training/`; `models/cards/`, `manifests/`, `checkpoints/`: model code, training and identified artifacts |
+| Evaluation and demo | `src/stognn/deployment/`, `evaluation/reports/`, `visualization/examples/`, `docs/demo.md`: export/inference, benchmark reports, failure galleries and demo instructions |
+| As commands become real | `scripts/`: thin Python/Windows PowerShell entrypoints; `pyproject.toml` and environment lock files from tested environments |
+
+Keep input observations separate from privileged supervision. Test frame/raster invariants, timestamps, split isolation, causality, metric fixtures and streaming resets. Visualizations distinguish sensor evidence, forecast probabilities and future ground truth. Model checkpoints identify source/config/data hashes and calibration metadata. Save run metrics in reviewable JSON/CSV with resolved configs and interpretation; planned experiments are not completed results.
+
+The proposed settings in `docs/v1-proposed.json` remain a design contract. Create runnable configs only during implementation. Add config subfolders for data/models/training/evaluation/deployment only as needed. Training recipes may stay in documentation until enough exist to justify a separate folder.
 
 ## Avoid duplicate ownership
 
