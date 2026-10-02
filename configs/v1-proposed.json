@@ -1,0 +1,124 @@
+{
+  "status": "design_only_not_executable",
+  "schema_version": "actor-bev-v1-proposed",
+  "platform": {
+    "planning": "macOS",
+    "implementation": "Windows",
+    "gpu": "unconfirmed"
+  },
+  "frame": {
+    "axes": [
+      "x_forward",
+      "y_left",
+      "z_up"
+    ],
+    "reference": "current_ego_origin_yaw_only_world_vertical",
+    "frozen_across_horizons": true
+  },
+  "grid": {
+    "x_bounds_m": [
+      -32,
+      32
+    ],
+    "y_bounds_m": [
+      -32,
+      32
+    ],
+    "upper_bounds_exclusive": true,
+    "resolution_m": 0.5,
+    "shape_hw": [
+      128,
+      128
+    ],
+    "row_axis": "y",
+    "column_axis": "x"
+  },
+  "timing": {
+    "simulation_dt_s": 0.05,
+    "history_offsets_s": [
+      -1,
+      -0.8,
+      -0.6,
+      -0.4,
+      -0.2,
+      0
+    ],
+    "input_frame_offsets": [
+      -20,
+      -16,
+      -12,
+      -8,
+      -4,
+      0
+    ],
+    "forecast_horizons_s": [
+      0.5,
+      1,
+      2,
+      3
+    ],
+    "target_frame_offsets": [
+      10,
+      20,
+      40,
+      60
+    ]
+  },
+  "input": {
+    "channels": [
+      "log_obstacle_return_density",
+      "normalized_max_obstacle_height",
+      "obstacle_hit",
+      "partial_ray_traversal_evidence"
+    ],
+    "shape_without_batch": [
+      6,
+      4,
+      128,
+      128
+    ],
+    "privileged_actor_state_allowed": false
+  },
+  "target": {
+    "semantics": "union_of_supported_non_ego_actor_box_footprints",
+    "include_stopped_actors": true,
+    "empty_means": "no_supported_actor_not_free_space",
+    "rasterizer": "positive_area_polygon_cell_intersection",
+    "validity_separate_from_input_visibility": true,
+    "shape_without_batch": [
+      4,
+      128,
+      128
+    ]
+  },
+  "model": {
+    "family": "channel_stacked_2d_unet",
+    "input_channels": 24,
+    "encoder_widths": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "future_logits": 4,
+    "current_auxiliary_logits": 1,
+    "normalization": "GroupNorm_8",
+    "activation": "SiLU"
+  },
+  "training": {
+    "loss": "unweighted_masked_BCEWithLogits",
+    "current_auxiliary_weight": 0.25,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "initial_batch_size": 4,
+    "max_epochs": 50,
+    "early_stopping_patience": 10,
+    "checkpoint_selection": "minimum_mean_future_validation_NLL"
+  },
+  "performance_goal": {
+    "predictions_per_second": 5,
+    "pipeline_p95_ms": 200,
+    "measured": false
+  }
+}

@@ -1,0 +1,16 @@
+# Local operating-system / Python artifacts
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Bulk artifacts: use the documented LFS/manifest policy before adding
+/datasets/raw/
+/datasets/processed/
+/models/checkpoints/
+/experiments/**/checkpoints/
+/experiments/**/tensorboard/
+/visualization/videos/
