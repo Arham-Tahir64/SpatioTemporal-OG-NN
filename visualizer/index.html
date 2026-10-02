@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Occupancy lab · SpatioTemporal-OG-NN</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="js/simulation.js"></script>
+    <script defer src="js/artifacts.js"></script>
+    <script defer src="js/network.js"></script>
+    <script defer src="js/render.js"></script>
+    <script defer src="js/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <strong>OCCUPANCY<span> / LAB</span></strong
+        ><small>SpatioTemporal-OG-NN · interactive playground</small>
+      </div>
+      <div class="modebar">
+        <button id="exploreMode" aria-pressed="true">Explore</button
+        ><button id="guidedMode" aria-pressed="false">Guided</button>
+      </div>
+      <div class="header-links">
+        <a href="reference.html">Concept lessons ↗</a
+        ><a href="README.md">Help</a>
+      </div>
+    </header>
+    <div class="notice" id="sourceBanner">
+      SYNTHETIC LAB · editable geometry + sensor-conditioned toy forecasts · no
+      trained network
+    </div>
+    <div id="guided" hidden>
+      <button id="guidePrev">← Previous</button>
+      <div>
+        <span id="guideCount"></span>
+        <h2 id="guideTitle"></h2>
+        <p id="guideText"></p>
+      </div>
+      <button id="guideNext">Next →</button>
+    </div>
+    <main>
+      <aside class="tools" id="sceneTools">
+        <div class="section-label">01 / Scene editor</div>
+        <label class="field"
+          >Scenario<select id="scenario">
+            <option value="default">Crossing + stopped car</option>
+            <option value="occlusion">Occluded pedestrian</option>
+            <option value="turn">Rotated ego frame</option>
+            <option value="empty">Empty scene</option>
+          </select></label
+        >
+        <div class="button-grid">
+          <button id="addVehicle">+ Vehicle</button
+          ><button id="addPedestrian">+ Pedestrian</button
+          ><button id="addObstacle">+ Obstacle</button
+          ><button id="reset">Reset scenario</button>
+        </div>
+        <p class="hint">
+          Drag an object to move it. Select ego or an actor below for precise
+          edits. Shift-drag pans; wheel zooms.
+        </p>
+        <label class="field"
+          >Selected object<select id="selection"></select
+        ></label>
+        <div id="objectFields">
+          <div class="two-fields">
+            <label
+              >x at t₀ (m)<input
+                id="objectX"
+                type="number"
+                min="-100"
+                max="100"
+                step=".5" /></label
+            ><label
+              >y at t₀ (m)<input
+                id="objectY"
+                type="number"
+                min="-100"
+                max="100"
+                step=".5" /></label
+            ><label
+              >vₓ (m/s)<input
+                id="velocityX"
+                type="number"
+                min="-10"
+                max="10"
+                step=".5" /></label
+            ><label
+              >vᵧ (m/s)<input
+                id="velocityY"
+                type="number"
+                min="-10"
+                max="10"
+                step=".5" /></label
+            ><label
+              >Yaw (°)<input
+                id="objectYaw"
+                type="number"
+                min="-180"
+                max="180"
+                step="5"
+            /></label>
+          </div>
+          <button id="removeObject" class="danger">
+            Remove selected actor
+          </button>
+        </div>
+        <div class="section-label">Sensors & timing</div>
+        <label class="check"
+          ><input id="lidar" type="checkbox" checked /> LiDAR · 360° first
+          returns</label
+        ><label class="check"
+          ><input id="camera" type="checkbox" checked /> RGB field of view ·
+          demo only</label
+        ><label class="check"
+          ><input id="compensate" type="checkbox" checked /> Ego-motion
+          compensation</label
+        ><label class="field"
+          >History frames <output id="historyLabel">6 / 1.0 s</output
+          ><input id="history" type="range" min="1" max="10" value="6" /></label
+        ><label class="field"
+          >Prediction horizon<select id="horizon">
+            <option value="0">Current · 0 s</option>
+            <option value="0.5">+0.5 s</option>
+            <option value="1">+1 s</option>
+            <option value="2" selected>+2 s</option>
+            <option value="3">+3 s</option>
+          </select></label
+        ><label class="field"
+          >Grid resolution<select id="resolution">
+            <option value="0.5">0.5 m · 128 × 128 (v1)</option>
+            <option value="1">1 m · 64 × 64 (experiment)</option>
+          </select></label
+        >
+        <p id="variant" class="hint"></p>
+      </aside>
+      <div class="workspace">
+        <div class="view-heading">
+          <div>
+            <div class="section-label">
+              Manipulate the scene → follow the evidence
+            </div>
+            <h1 id="workspaceTitle">Scene & perception</h1>
+          </div>
+          <div class="button-row">
+            <label class="check"
+              ><input id="panMode" type="checkbox" />Pan mode</label
+            ><button id="zoomIn" aria-label="Zoom both views in">+</button
+            ><button id="zoomOut" aria-label="Zoom both views out">−</button
+            ><button id="homeView">Fit views</button
+            ><button id="undo">Undo edit</button>
+          </div>
+        </div>
+        <div class="scene-grid">
+          <figure id="scenePanel">
+            <figcaption>
+              <b>World scene</b><span id="sceneMeta">Drag to edit</span>
+            </figcaption>
+            <canvas
+              id="scene"
+              width="660"
+              height="500"
+              tabindex="0"
+              aria-label="Editable world scene. Drag actors or use the labeled object fields to edit. Shift-drag to pan, wheel to zoom."
+            ></canvas>
+            <div class="legend">
+              <span class="green">Actors</span
+              ><span class="blue">Structures</span
+              ><span class="amber">Ego / RGB frustum</span>
+            </div>
+          </figure>
+          <figure id="gridPanel">
+            <figcaption>
+              <b>Occupancy inspector</b
+              ><span id="gridMeta">E₀ · actor target</span>
+            </figcaption>
+            <canvas
+              id="grid"
+              width="660"
+              height="500"
+              tabindex="0"
+              aria-label="Occupancy grid. Click a cell or use arrow keys to inspect it. Shift-drag to pan and wheel to zoom."
+            ></canvas>
+            <div class="legend">
+              <span class="green">TP</span><span class="red">FP</span
+              ><span class="amber">FN</span
+              ><span>Dark: true no-actor, not safe space</span>
+            </div>
+          </figure>
+        </div>
+        <div class="transport">
+          <button id="rewind" aria-label="Rewind to minus two seconds">↤</button
+          ><button id="stepBack" aria-label="Previous 0.2 second timestep">
+            −0.2</button
+          ><button id="play">Play</button
+          ><button id="stepForward" aria-label="Next 0.2 second timestep">
+            +0.2</button
+          ><input
+            id="time"
+            type="range"
+            min="-2"
+            max="4"
+            value="0"
+            step=".05"
+            aria-label="Simulation anchor time"
+          /><output id="timeLabel">t = 0.00 s</output
+          ><label class="check"
+            ><input id="animateHorizon" type="checkbox" /> Animate
+            horizons</label
+          >
+        </div>
+        <div class="layer-row" id="layers">
+          <label class="check"
+            ><input id="layerStatic" type="checkbox" checked /> Static
+            structures</label
+          ><label class="check"
+            ><input id="layerActors" type="checkbox" checked /> Actor
+            outlines</label
+          ><label class="check"
+            ><input id="layerTruth" type="checkbox" /> Ground truth</label
+          ><label class="check"
+            ><input id="layerPrediction" type="checkbox" checked />
+            Prediction</label
+          ><label class="check"
+            ><input id="layerVelocity" type="checkbox" /> Velocity</label
+          ><label class="check"
+            ><input id="layerFlow" type="checkbox" /> Backward flow</label
+          ><label class="check"
+            ><input id="layerUncertainty" type="checkbox" /> Entropy</label
+          ><label class="check"
+            ><input id="layerErrors" type="checkbox" /> Errors</label
+          ><label class="check"
+            ><input id="layerRays" type="checkbox" /> Rays</label
+          ><label class="check"
+            ><input id="layerFrames" type="checkbox" checked /> Coordinate
+            frames</label
+          >
+        </div>
+        <nav class="tabs" aria-label="Learning workspaces">
+          <button data-tab="temporal" aria-pressed="true">Sensor → BEV</button
+          ><button data-tab="network" aria-pressed="false">
+            Network explorer</button
+          ><button data-tab="training" aria-pressed="false">Training lab</button
+          ><button data-tab="artifacts" aria-pressed="false">
+            Real-data inspector</button
+          ><button data-tab="roadmap" aria-pressed="false">Roadmap</button>
+        </nav>
+        <section id="temporal" class="tab">
+          <div class="section-label">
+            Same scene · different representations
+          </div>
+          <div class="subcontrols">
+            <label
+              >BEV channel
+              <select id="channel">
+                <option value="hit">Obstacle hit</option>
+                <option value="density">Log return density</option>
+                <option value="height">Max height · synthetic proxy</option>
+                <option value="traversal">Partial ray traversal</option>
+              </select></label
+            ><label
+              >Inspect history slot
+              <input
+                id="historySlot"
+                type="range"
+                min="0"
+                max="5"
+                value="5" /><output id="slotLabel"></output
+            ></label>
+          </div>
+          <div class="three-views">
+            <figure>
+              <figcaption>
+                <b>Aligned histories</b><span>Fixed E₀</span>
+              </figcaption>
+              <canvas
+                id="aligned"
+                width="440"
+                height="320"
+                aria-label="Aligned temporal LiDAR points"
+              ></canvas>
+            </figure>
+            <figure>
+              <figcaption>
+                <b>Unaligned histories</b><span>Sensor coordinates</span>
+              </figcaption>
+              <canvas
+                id="unaligned"
+                width="440"
+                height="320"
+                aria-label="Unaligned temporal LiDAR points"
+              ></canvas>
+            </figure>
+            <figure>
+              <figcaption>
+                <b>Anchor evidence channel</b><span id="channelLabel"></span>
+              </figcaption>
+              <canvas
+                id="bev"
+                width="440"
+                height="320"
+                aria-label="Selected BEV evidence channel"
+              ></canvas>
+            </figure>
+          </div>
+          <div class="readout-row">
+            <pre id="pointReadout"></pre>
+            <p class="hint">
+              Bright points mark the selected history slot. Alignment keeps
+              structures together but preserves actor motion. The real
+              preprocessing requires 3D height-aware rays and estimated ground;
+              this 2D simulator uses assigned heights. RGB is a visible frustum
+              only and never enters the v1 predictor.
+            </p>
+          </div>
+        </section>
+        <section id="network" class="tab" hidden>
+          <div class="subcontrols">
+            <label
+              >Architecture comparison<select id="architecture">
+                <option value="stack">Stack + CNN · proposed v1</option>
+                <option value="lstm">ConvLSTM · conceptual challenger</option>
+                <option value="attention">
+                  Temporal attention / Transformer · conceptual
+                </option>
+              </select></label
+            ><button id="tensorPrev">← Tensor</button
+            ><button id="tensorNext">Tensor →</button>
+          </div>
+          <p class="hint" id="architectureNote"></p>
+          <div id="networkNodes" class="network-nodes"></div>
+          <div class="network-detail">
+            <div>
+              <h2 id="layerName"></h2>
+              <pre id="layerDetails"></pre>
+              <p id="layerPurpose"></p>
+            </div>
+            <figure>
+              <figcaption>
+                <b id="featureTitle">Toy feature response</b
+                ><span>Not learned activations</span>
+              </figcaption>
+              <canvas
+                id="features"
+                width="480"
+                height="270"
+                aria-label="Illustrative feature tensor response to the live BEV"
+              ></canvas>
+            </figure>
+          </div>
+          <details open>
+            <summary>Operate on a real toy feature map</summary>
+            <div class="subcontrols">
+              <label
+                >3×3 kernel<select id="kernel">
+                  <option value="identity">Identity</option>
+                  <option value="blur">Mean blur</option>
+                  <option value="edge">Horizontal edge</option>
+                </select></label
+              ><label
+                >Illustrative feature<select id="featureChannel">
+                  <option value="0">Hit response</option>
+                  <option value="1">Density response</option>
+                  <option value="2">Height response</option>
+                  <option value="3">Traversal response</option>
+                </select></label
+              ><label
+                >Sample channel index<input
+                  id="tensorChannel"
+                  type="range"
+                  min="0"
+                  max="23"
+                  value="0" /><output id="tensorChannelValue"></output
+              ></label>
+            </div>
+            <p class="hint">
+              At the input, channel selection chooses an actual history slot and
+              evidence plane. At the output, it chooses one of four toy forecast
+              horizons. Hidden learned channels are unavailable, so
+              channel-index selection is disabled there; the image instead
+              demonstrates convolution and resampling of a selected evidence
+              plane. Changing the temporal comparison also changes the toy
+              predictor's centroid-velocity aggregation; it does not run a
+              ConvLSTM or Transformer.
+            </p>
+          </details>
+        </section>
+        <section id="training" class="tab" hidden>
+          <div class="section-label">Two linked experiments</div>
+          <div class="subcontrols">
+            <label
+              >Prediction velocity bias
+              <input
+                id="bias"
+                type="range"
+                min="-4"
+                max="4"
+                value="0"
+                step=".25" /><output id="biasLabel"></output></label
+            ><label
+              >Spatial spread
+              <input
+                id="spread"
+                type="range"
+                min=".25"
+                max="2"
+                value=".65"
+                step=".05" /><output id="spreadLabel"></output></label
+            ><label
+              >Threshold
+              <input
+                id="threshold"
+                type="range"
+                min=".05"
+                max=".95"
+                value=".5"
+                step=".05" /><output id="thresholdLabel"></output
+            ></label>
+          </div>
+          <p class="hint">
+            These controls update the live forecast and metrics above.
+            Bias/spread change probabilities; the threshold changes only binary
+            decisions. Entropy measures ambiguity, not validated epistemic
+            uncertainty.
+          </p>
+          <div class="training-grid">
+            <figure>
+              <figcaption>
+                <b>Independent-logit training patch</b
+                ><span id="trainSteps">0 updates</span>
+              </figcaption>
+              <canvas
+                id="trainPatch"
+                width="440"
+                height="320"
+                tabindex="0"
+                aria-label="Eight by eight training patch. Click or use arrow keys to select a cell, then edit probability or target."
+              ></canvas>
+            </figure>
+            <figure>
+              <figcaption>
+                <b>BCE curve & gradient steps</b><span>Unweighted, masked</span>
+              </figcaption>
+              <canvas
+                id="lossPlot"
+                width="520"
+                height="320"
+                aria-label="Loss curve and loss history from gradient descent"
+              ></canvas>
+            </figure>
+          </div>
+          <div class="subcontrols">
+            <button id="capturePatch">
+              Capture patch around inspected cell</button
+            ><button id="trainStep">1 gradient step</button
+            ><button id="trainMany">20 steps</button
+            ><button id="trainReset">Reset patch</button
+            ><label
+              >Learning rate<input
+                id="learningRate"
+                type="range"
+                min=".1"
+                max="3"
+                value="1"
+                step=".1" /><output id="lrLabel"></output
+            ></label>
+          </div>
+          <div class="subcontrols">
+            <label
+              >Selected cell probability<input
+                id="trainP"
+                type="range"
+                min=".01"
+                max=".99"
+                value=".5"
+                step=".01" /></label
+            ><label
+              >Target<select id="trainY">
+                <option value="0">0 · no selected actor</option>
+                <option value="1">1 · actor</option>
+              </select></label
+            ><label class="check"
+              ><input id="trainValid" type="checkbox" checked /> Valid
+              supervision</label
+            >
+          </div>
+          <pre id="trainingReadout"></pre>
+          <p class="hint">
+            This patch performs real gradient descent on independent cell
+            logits: dBCE/dz = p − y; z ← z − η(p − y). It is not U-Net training
+            and has no shared weights or generalization. The step uses a sum
+            loss; displayed NLL is its valid-cell mean. Patches are frozen
+            snapshots; edit the scene, then capture again. The real model
+            averages valid cells per horizon, gives future horizons equal
+            weight, and adds 0.25 × current-head loss.
+          </p>
+        </section>
+        <section id="artifacts" class="tab" hidden>
+          <h2>Inspect a saved prediction</h2>
+          <p>
+            Load probabilities, truth and validity from one frozen
+            anchor/horizon. The grid, cell inspector and metrics use the
+            imported arrays. Simulation controls are locked until you return to
+            the synthetic scene.
+          </p>
+          <div class="subcontrols">
+            <label class="file"
+              >Import JSON<input
+                id="importArtifact"
+                type="file"
+                accept=".json,application/json" /></label
+            ><button id="exportArtifact">Export synthetic snapshot</button
+            ><button id="clearArtifact">Return to simulation</button>
+          </div>
+          <p id="importStatus" role="status"></p>
+          <pre id="artifactInfo">No artifact loaded.</pre>
+          <p class="hint">
+            The importer validates shape, grid/frame conventions, probability
+            ranges, binary truth/masks and provenance. It does not verify
+            scientific validity or the claimed checkpoint. Real model records
+            require model, dataset and checkpoint IDs. No training/backend
+            integration exists yet.
+          </p>
+          <a href="README.md#artifact-contract"
+            >Artifact schema and integration instructions ↗</a
+          >
+        </section>
+        <section id="roadmap" class="tab" hidden>
+          <h2>Project state</h2>
+          <p class="hint">
+            Research/specification and this synthetic visualizer are built.
+            Model/data implementation has not started. Planning is on Mac;
+            implementation will be on Windows.
+          </p>
+          <div id="phaseList"></div>
+          <a href="../ROADMAP.md"
+            >Full evidence gates and implementation tasks ↗</a
+          >
+        </section>
+      </div>
+      <aside class="inspector">
+        <div class="section-label">Live inspection</div>
+        <h2>Cell <span id="cellName"></span></h2>
+        <p class="hint">
+          Click the occupancy grid; arrow keys move the selection. Zoom is
+          centered on the pointer.
+        </p>
+        <pre id="cellInfo" aria-live="polite"></pre>
+        <div id="metrics" class="metrics" aria-live="polite"></div>
+        <p id="support" class="hint"></p>
+        <details>
+          <summary>What do these layers mean?</summary>
+          <p>
+            Static = structure truth for teaching. Actor outlines include
+            stopped vehicles. Prediction = binary actor probability, not
+            semantic class or free space. Flow = optional backward ground-truth
+            displacement for a unique supported correspondence. Velocity = toy
+            track estimate. Errors = TP/FP/FN/TN at the selected threshold.
+            Missing supervision is hatched.
+          </p>
+          <p>
+            Correct negative cells mean no selected actor, never certified safe
+            free space. A wall may be a true negative for this actor-only task.
+          </p>
+        </details>
+        <details>
+          <summary>Forecast limitations</summary>
+          <p>
+            Hits are associated using synthetic object IDs and known box sizes.
+            Motion comes from hit-centroid histories. Architecture options
+            switch toy aggregation rules. No neural weights are loaded. This is
+            not an implementable sensor-only benchmark baseline; oracle
+            assistance is deliberate and visible.
+          </p>
+        </details>
+        <p id="editStatus" role="status" class="hint"></p>
+      </aside>
+    </main>
+    <footer>
+      Local-only · no dependencies or telemetry ·
+      <a href="../docs/architecture.md">Proposed architecture</a> ·
+      <a href="../docs/evaluation-strategy.md">Evaluation contract</a> ·
+      <a href="reference.html">Geometry, mapping and camera lessons</a>
+    </footer>
+    <noscript
+      >This application needs JavaScript. No server or installation is required:
+      open index.html in a browser with JavaScript enabled.</noscript
+    >
+  </body>
+</html>

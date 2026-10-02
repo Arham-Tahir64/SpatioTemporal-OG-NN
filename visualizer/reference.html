@@ -1,0 +1,2232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="An offline, interactive guide to the proposed SpatioTemporal-OG-NN LiDAR occupancy forecaster."
+    />
+    <title>SpatioTemporal-OG-NN · Visual companion</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #101719;
+        --panel: #172124;
+        --line: #344448;
+        --ink: #e8efec;
+        --muted: #abc0bd;
+        --accent: #a6efb4;
+        --amber: #efbd79;
+        --blue: #89b8df;
+        --bad: #ed9292;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+      a {
+        color: var(--accent);
+        text-underline-offset: 4px;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      select {
+        color: var(--ink);
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      button:hover,
+      button.active,
+      button[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: #244132;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      :focus-visible {
+        outline: 3px solid var(--amber);
+        outline-offset: 4px;
+      }
+      input[type="range"] {
+        accent-color: var(--accent);
+        width: 160px;
+        vertical-align: middle;
+      }
+      input[type="checkbox"] {
+        accent-color: var(--accent);
+        width: 17px;
+        height: 17px;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #101719f5;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 4vw;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        backdrop-filter: blur(12px);
+      }
+      header strong {
+        font-size: 14px;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+      }
+      nav {
+        display: flex;
+        gap: 18px;
+        overflow: auto;
+        font-size: 13px;
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+      main {
+        max-width: 1400px;
+        margin: auto;
+        padding: 40px 4vw;
+      }
+      section {
+        padding: 52px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      section:first-child {
+        padding-top: 0;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 650;
+      }
+      h1 {
+        font-size: clamp(30px, 4vw, 56px);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        max-width: 780px;
+        margin: 14px 0 20px;
+      }
+      h2 {
+        font-size: clamp(25px, 3vw, 36px);
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+        margin: 10px 0 18px;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 12px 0;
+      }
+      p {
+        max-width: 850px;
+        margin: 12px 0;
+        color: var(--muted);
+      }
+      .lead {
+        font-size: 18px;
+        max-width: 770px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 12px;
+        color: var(--amber);
+        border-bottom: 1px solid var(--amber);
+        margin-bottom: 8px;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.65fr) minmax(270px, 1fr);
+        gap: 30px;
+        margin-top: 25px;
+        align-items: start;
+      }
+      .visual {
+        background: var(--panel);
+        position: relative;
+        min-width: 0;
+      }
+      .visual canvas {
+        width: 100%;
+        display: block;
+      }
+      .canvaslabel {
+        padding: 12px 16px;
+        font:
+          12px ui-monospace,
+          monospace;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        align-items: center;
+        margin: 16px 0;
+      }
+      .controls label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+      .controls output {
+        font:
+          13px ui-monospace,
+          monospace;
+        min-width: 38px;
+        color: var(--accent);
+      }
+      .inspector {
+        border-left: 2px solid var(--accent);
+        padding: 0 0 0 20px;
+      }
+      .inspector p {
+        font-size: 14px;
+      }
+      .mono,
+      code,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 13px;
+      }
+      code {
+        color: var(--accent);
+      }
+      pre {
+        background: var(--panel);
+        padding: 18px;
+        overflow: auto;
+        border-left: 2px solid var(--line);
+        line-height: 1.7;
+      }
+      .legend {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 10px 0;
+      }
+      .key:before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        display: inline-block;
+        background: var(--key, var(--accent));
+        margin-right: 7px;
+      }
+      .note {
+        font-size: 13px;
+        color: var(--amber);
+      }
+      .timeline {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .timeline button {
+        flex: 1;
+        min-width: 55px;
+        font-size: 12px;
+        padding: 9px 5px;
+      }
+      .steps {
+        display: flex;
+        gap: 7px;
+        overflow-x: auto;
+        padding: 10px 0;
+      }
+      .steps button {
+        min-width: 125px;
+        flex: 1;
+        text-align: left;
+        font-size: 13px;
+      }
+      .steps small {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+      .triple {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      .triple canvas {
+        width: 100%;
+        background: var(--panel);
+      }
+      .caption {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      .metricstrip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin: 18px 0;
+      }
+      .metricstrip span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .metricstrip b {
+        display: block;
+        color: var(--ink);
+        font:
+          24px ui-monospace,
+          monospace;
+      }
+      .architecture {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 250px;
+        overflow-x: auto;
+        padding: 16px 4px;
+      }
+      .architecture button {
+        flex: 1;
+        min-width: 84px;
+        padding: 14px 8px;
+        background: #22332d;
+        transition:
+          transform 0.15s,
+          border-color 0.15s;
+      }
+      .architecture button:hover {
+        transform: translateY(-5px);
+      }
+      .architecture small {
+        display: block;
+        color: var(--muted);
+        font:
+          11px ui-monospace,
+          monospace;
+        white-space: nowrap;
+      }
+      .architecture b {
+        font-size: 12px;
+      }
+      .arrow {
+        color: var(--muted);
+      }
+      details {
+        margin: 18px 0;
+        border-top: 1px solid var(--line);
+        padding-top: 12px;
+      }
+      summary {
+        cursor: pointer;
+        color: var(--accent);
+      }
+      .phase {
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        gap: 16px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+        align-items: start;
+      }
+      .phase-num {
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+      .phase.current .phase-num {
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .phase h3 {
+        margin: 0;
+      }
+      .phase p {
+        margin: 4px 0;
+        font-size: 14px;
+      }
+      .phase small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .status {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .phase.current .status {
+        color: var(--accent);
+      }
+      footer {
+        padding: 35px 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+      .probbar {
+        height: 10px;
+        background: linear-gradient(90deg, #19282a, #a6efb4);
+        margin: 12px 0;
+      }
+      .btnrow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .flowcanvas {
+        max-width: 680px;
+      }
+      noscript {
+        display: block;
+        padding: 20px;
+        color: var(--amber);
+      }
+      @media (max-width: 850px) {
+        header {
+          display: block;
+        }
+        header nav {
+          margin-top: 7px;
+        }
+        .workspace,
+        .split {
+          grid-template-columns: 1fr;
+        }
+        .triple {
+          grid-template-columns: 1fr;
+        }
+        .triple > div {
+          max-width: 520px;
+        }
+        .inspector {
+          margin: 8px 0;
+        }
+        .architecture {
+          min-height: 210px;
+        }
+        main {
+          padding-top: 25px;
+        }
+        .phase {
+          grid-template-columns: 35px 1fr;
+        }
+        .phase .status {
+          grid-column: 2;
+        }
+        .controls {
+          gap: 12px;
+        }
+        section {
+          padding: 35px 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>SPATIOTEMPORAL / OG-NN</strong>
+      <nav aria-label="Sections">
+        <a href="#scene">Scene lab</a><a href="#geometry">Geometry</a
+        ><a href="#pipeline">Pipeline</a><a href="#network">Network</a
+        ><a href="#training">Training</a><a href="#evaluation">Evaluation</a
+        ><a href="#roadmap">Roadmap</a>
+      </nav>
+    </header>
+    <main>
+      <p>
+        <a href="index.html">← Open the editable playground</a> · Supplemental
+        concept lessons; the playground is the primary visualizer.
+      </p>
+      <section id="scene">
+        <div class="eyebrow">
+          Visual companion · proposed actor-BEV v1 · 02 Oct 2026
+        </div>
+        <h1>From LiDAR history<br />to future occupancy.</h1>
+        <p class="lead">
+          Explore how six observations become four forecasts. Start with the
+          scene, then follow the evidence through geometry, the network and
+          evaluation.
+        </p>
+        <span class="tag"
+          >Interactive teaching simulation · no trained model or recorded
+          dataset yet</span
+        >
+        <div class="workspace">
+          <div>
+            <div class="visual">
+              <div class="canvaslabel">
+                FIXED CURRENT EGO FRAME E₀ / 64 × 64 m / +x right, +y up
+              </div>
+              <canvas
+                id="sceneCanvas"
+                width="720"
+                height="620"
+                tabindex="0"
+                aria-label="Interactive top-down scene. Click to inspect a cell, or use arrow keys to move the selected cell."
+              ></canvas>
+            </div>
+            <div class="legend">
+              <span class="key">Actor / LiDAR return</span
+              ><span class="key" style="--key: var(--blue)"
+                >Stationary structure</span
+              ><span class="key" style="--key: var(--amber)"
+                >Ego / truth outline</span
+              ><span class="key" style="--key: #586461">History (faded)</span>
+            </div>
+            <div class="timeline" id="timeline" aria-label="Scene time"></div>
+            <div class="controls">
+              <button id="play">Play timeline</button
+              ><button id="resetScene">Reset scene</button
+              ><label
+                >Future horizon
+                <select id="horizon">
+                  <option value="0.5">+0.5 s</option>
+                  <option value="1">+1 s</option>
+                  <option value="2" selected>+2 s</option>
+                  <option value="3">+3 s</option>
+                </select></label
+              >
+            </div>
+          </div>
+          <div class="inspector">
+            <h3 id="sceneTitle">Anchor t = 0 s</h3>
+            <p id="timeExplanation"></p>
+            <div class="controls">
+              <label
+                ><input id="structures" type="checkbox" checked /> Static
+                structures</label
+              ><label
+                ><input id="moving" type="checkbox" checked /> Moving
+                actors</label
+              ><label
+                ><input id="stopped" type="checkbox" checked /> Stopped
+                vehicle</label
+              ><label
+                ><input id="history" type="checkbox" checked /> Six-frame
+                history</label
+              ><label
+                ><input id="compensate" type="checkbox" checked /> Ego
+                compensation</label
+              ><label><input id="rays" type="checkbox" /> Returning rays</label
+              ><label
+                ><input id="forecast" type="checkbox" checked /> Illustrative
+                forecast</label
+              >
+            </div>
+            <p id="alignmentExplanation"></p>
+            <h3>Inspect a grid cell</h3>
+            <p>
+              Click the scene or focus it and use arrow keys. Each cell is 0.5 ×
+              0.5 m. The display flips screen y so +y points upward; tensor rows
+              still increase with y.
+            </p>
+            <pre id="cellReadout" aria-live="polite"></pre>
+            <div class="probbar" aria-hidden="true"></div>
+            <div class="legend">
+              <span>p = 0 · no selected actor</span
+              ><span>p = 1 · selected actor</span>
+            </div>
+            <p class="note">
+              Low actor probability does not mean safe/free space. Walls are not
+              actor targets; the stopped vehicle is. Unknown sensor evidence is
+              separate from predicted probability.
+            </p>
+          </div>
+        </div>
+        <details>
+          <summary>
+            Classical occupancy mapping: accumulate evidence in one cell
+          </summary>
+          <p>
+            This is a separate static-map toy. Start with p = 0.5, then add hit
+            or traversal evidence. No observation leaves the prior unchanged.
+            This Bayesian update explains sensor mapping; the neural forecast
+            above predicts actor occupancy using learned context.
+          </p>
+          <div class="controls">
+            <button id="mapHit">Add hit (inverse p = 0.7)</button
+            ><button id="mapFree">Add traversal (inverse p = 0.3)</button
+            ><button id="mapUnknown">No new evidence</button
+            ><button id="mapReset">Reset prior</button>
+          </div>
+          <pre id="mapReadout" aria-live="polite">
+log odds = 0.000 · p = 0.500</pre
+          >
+          <p>
+            <code>lₜ = lₜ₋₁ + logit(p(m | zₜ, xₜ)) − l_prior</code>. This demo
+            uses a 0.5 prior and caps log odds at ±4. Repeated correlated
+            measurements can overstate confidence; moving objects violate the
+            static-map assumption. Traversing a 3D ray does not clear an entire
+            2D column.
+          </p>
+        </details>
+        <details>
+          <summary>What is actually being simulated?</summary>
+          <p>
+            A deterministic 2D scene with a moving car, a crossing pedestrian, a
+            stopped vehicle and two structures. Rays stop at the first rectangle
+            they intersect. Forecasts use a deliberately imperfect analytic
+            motion rule, not a neural network. The small sensor demo omits 3D
+            heights, noise and full CARLA geometry. Toggles change this toy
+            scenario; they are not simulator-semantic inputs available to the
+            real model.
+          </p>
+        </details>
+      </section>
+      <section id="geometry">
+        <div class="eyebrow">01 / Put observations in the same place</div>
+        <h2>Remove ego motion. Keep actor motion.</h2>
+        <p>
+          A stationary landmark shifts in sensor coordinates as the car moves.
+          Transform each return through world coordinates into the one frozen
+          current-ego frame before making BEV features.
+        </p>
+        <div class="workspace">
+          <div class="visual">
+            <div class="canvaslabel">
+              2D WORKED EXAMPLE / METERS / SENSOR POINT pₛ = (10, 4)
+            </div>
+            <canvas
+              id="transformCanvas"
+              width="720"
+              height="440"
+              aria-label="Sensor and world coordinate axes with a transformed landmark"
+            ></canvas>
+          </div>
+          <div class="inspector">
+            <div class="controls">
+              <label
+                >Sensor yaw
+                <input
+                  id="yaw"
+                  type="range"
+                  min="-90"
+                  max="90"
+                  value="25" /><output id="yawValue"></output></label
+              ><label
+                >Sensor x in world
+                <input
+                  id="tx"
+                  type="range"
+                  min="-10"
+                  max="10"
+                  step="0.5"
+                  value="-4" /><output id="txValue"></output
+              ></label>
+            </div>
+            <pre id="transformReadout"></pre>
+            <p>
+              Here E₀ has world position (3, −2), yaw 0°. Changing the
+              historical sensor pose changes how a local return reaches E₀. The
+              real pipeline uses full 3D sensor transforms and a yaw-only,
+              world-vertical E₀.
+            </p>
+            <code>p_E₀ = inverse(T_W_E₀) · T_W_Sₖ · p_Sₖ</code>
+            <p>
+              CARLA: x forward, y right, z up.<br />Internal: x forward, y left,
+              z up.<br /><code>S = diag(1, −1, 1, 1)</code><br />Convert points
+              with S and transforms with S·T·S once at ingestion.
+            </p>
+          </div>
+        </div>
+        <details>
+          <summary>Why alignment does not stop moving objects</summary>
+          <p>
+            Transforming coordinate frames changes how a physical location is
+            expressed; it does not rewind an actor. After compensation,
+            buildings overlap across all six frames, but a moving car traces its
+            actual motion. Turn compensation off in the scene to see ego-induced
+            trails added to both. Future labels also stay in E₀; using a future
+            ego frame would silently change the prediction task.
+          </p>
+        </details>
+      </section>
+      <section id="pipeline">
+        <div class="eyebrow">02 / Follow one inference window</div>
+        <h2>Observations become evidence, then probabilities.</h2>
+        <p>
+          Step through the causal inference path. Privileged actor boxes join
+          only the training/evaluation branch.
+        </p>
+        <div class="steps" id="pipelineSteps"></div>
+        <div class="controls">
+          <button id="prevStage">← Previous stage</button
+          ><button id="nextStage">Next stage →</button
+          ><label
+            >Evidence channel
+            <select id="channel">
+              <option value="density">Return density</option>
+              <option value="height">Height (synthetic 2D proxy)</option>
+              <option value="hit">Obstacle hit</option>
+              <option value="traversal">Ray traversal</option>
+            </select></label
+          >
+        </div>
+        <div class="workspace">
+          <div class="visual">
+            <div class="canvaslabel" id="pipelineCaption"></div>
+            <canvas
+              id="pipelineCanvas"
+              width="720"
+              height="490"
+              aria-label="Current pipeline stage visualization"
+            ></canvas>
+          </div>
+          <div class="inspector">
+            <h3 id="stageTitle"></h3>
+            <pre id="stageShape"></pre>
+            <p id="stageText"></p>
+            <p id="stageCaution" class="note"></p>
+          </div>
+        </div>
+        <details>
+          <summary>Where would cameras enter?</summary>
+          <p>
+            In v1, RGB is only a demo panel. A later camera branch would extract
+            image features, estimate a depth distribution, unproject pixels with
+            camera intrinsics, transform points with extrinsics, then lift/splat
+            features into BEV before fusion. One pixel is a ray, not a known BEV
+            position: depth uncertainty matters. BEVFormer-style attention is
+            another option; neither camera branch is part of the initial LiDAR
+            model.
+          </p>
+          <pre>
+pixel (u,v) + depth d → d·K⁻¹[u,v,1]ᵀ → T_E₀_camera → BEV feature aggregation</pre
+          >
+        </details>
+      </section>
+      <section id="network">
+        <div class="eyebrow">03 / Learn space and time</div>
+        <h2>One compact baseline. Alternatives with a purpose.</h2>
+        <p>
+          Hover, focus or select a U-Net stage to inspect its dimensions. These
+          are the proposed v1 tensors, not a running model. B is batch size.
+        </p>
+        <div class="architecture" id="unet"></div>
+        <div class="inspector">
+          <h3 id="layerTitle"></h3>
+          <pre id="layerShape"></pre>
+          <p id="layerText"></p>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Choose a temporal design</h3>
+            <div class="btnrow" id="fusionButtons"></div>
+            <div class="visual" style="margin-top: 16px">
+              <canvas
+                id="fusionCanvas"
+                width="650"
+                height="220"
+                aria-label="Temporal fusion design diagram"
+              ></canvas>
+            </div>
+          </div>
+          <div>
+            <h3 id="fusionTitle"></h3>
+            <p id="fusionText"></p>
+            <pre id="fusionShape"></pre>
+            <p class="note" id="fusionCaution"></p>
+          </div>
+        </div>
+        <details>
+          <summary>What is a feature map?</summary>
+          <p>
+            Each channel is a learned spatial response, not necessarily an
+            interpretable object label. A 3×3 convolution mixes nearby cells and
+            all input channels. Downsampling expands context; decoder upsampling
+            and skip connections recover localization. The 24 input channels
+            preserve six time slots × four evidence channels. The first stacked
+            convolution mixes time immediately—there is no separate recurrent
+            block in the v1 model.
+          </p>
+          <p>
+            Each block uses two padded 3×3 convolutions, GroupNorm with 8 groups
+            and SiLU. Bilinear upsampling uses align_corners=False. The four
+            output channels are independent future Bernoulli logits; applying a
+            softmax across horizons would be incorrect.
+          </p>
+        </details>
+      </section>
+      <section id="training">
+        <div class="eyebrow">04 / Teach the target, not sensor visibility</div>
+        <h2>Future boxes provide the answer key.</h2>
+        <div class="split">
+          <div>
+            <div class="visual">
+              <div class="canvaslabel">
+                TARGET RASTERIZATION / POSITIVE-AREA CELL INTERSECTION
+              </div>
+              <canvas
+                id="targetCanvas"
+                width="600"
+                height="340"
+                aria-label="Actor footprint rasterized on a grid"
+              ></canvas>
+            </div>
+            <div class="controls">
+              <label
+                >Box offset
+                <input
+                  id="boxOffset"
+                  type="range"
+                  min="0"
+                  max="1"
+                  value="0.2"
+                  step="0.01" /><output id="offsetValue"></output
+              ></label>
+            </div>
+            <p>
+              Move the box across cell boundaries. Every cell with positive
+              intersection area is occupied. This teaching inset uses 0.5 m
+              cells and a 2 × 1 m rectangle; actual labels use transformed
+              oriented box polygons and a numerical tolerance.
+            </p>
+          </div>
+          <div>
+            <h3>A separate supervision branch</h3>
+            <pre>
+CARLA actor truth at t+h
+  → box-local corners → world → fixed E₀
+  → clip to ROI → polygon/cell intersection
+  → union of supported non-ego actors
+  → binary target Yₕ + independent validity Mₕ</pre
+            >
+            <p>
+              Include stopped and input-occluded actors. Exclude ego by
+              identity. A cell unseen by LiDAR can still have a valid simulator
+              label. Missing truth is invalid supervision, not an empty target.
+            </p>
+            <p>
+              At 20 Hz, histories use tick offsets −20, −16, −12, −8, −4, 0;
+              future truth uses +10, +20, +40, +60. Join exact frame IDs; keep
+              future truth inaccessible to model inputs.
+            </p>
+          </div>
+        </div>
+        <div class="workspace">
+          <div class="visual">
+            <div class="canvaslabel">BINARY CROSS-ENTROPY / ONE VALID CELL</div>
+            <canvas
+              id="lossCanvas"
+              width="720"
+              height="340"
+              aria-label="Binary cross entropy versus predicted probability"
+            ></canvas>
+          </div>
+          <div class="inspector">
+            <h3>Try a confident mistake</h3>
+            <div class="controls">
+              <label
+                >Prediction p
+                <input
+                  id="probability"
+                  type="range"
+                  min="0.01"
+                  max="0.99"
+                  value="0.7"
+                  step="0.01" /><output id="probabilityValue"></output></label
+              ><label
+                >Target
+                <select id="target">
+                  <option value="1">1 · actor</option>
+                  <option value="0">0 · no actor</option>
+                </select></label
+              ><label
+                ><input id="valid" type="checkbox" checked /> Valid label</label
+              >
+            </div>
+            <pre id="lossReadout" aria-live="polite"></pre>
+            <p>
+              Loss averages valid cells within each horizon, then averages valid
+              horizons equally. Add 0.25 × the current-head loss. Skip an
+              entirely invalid horizon; reject a batch with no valid
+              supervision.
+            </p>
+            <code>L = −y log p − (1−y) log(1−p)</code>
+            <p>
+              Train with stable BCEWithLogits, without a preceding sigmoid.
+              Unweighted BCE is the default. Weighted/focal/Dice alternatives
+              need controlled ablations and calibration checks.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="evaluation">
+        <div class="eyebrow">05 / Inspect errors, not just attractive maps</div>
+        <h2>Probability quality and overlap are different.</h2>
+        <p>
+          These three views compare the same synthetic forecast with analytic
+          future truth. They are a metric sandbox, not project benchmark
+          results. Horizon and scene actor toggles above also change this
+          example.
+        </p>
+        <div class="controls">
+          <label
+            >Threshold
+            <input
+              id="threshold"
+              type="range"
+              min="0.05"
+              max="0.95"
+              step="0.05"
+              value="0.5" /><output id="thresholdValue"></output></label
+          ><label
+            >Car x bias at +2 s
+            <input
+              id="bias"
+              type="range"
+              min="-4"
+              max="4"
+              step="0.25"
+              value="1" /><output id="biasValue"></output></label
+          ><label
+            >Spread
+            <input
+              id="spread"
+              type="range"
+              min="0.25"
+              max="2"
+              step="0.25"
+              value="0.75" /><output id="spreadValue"></output
+          ></label>
+        </div>
+        <div class="triple">
+          <div>
+            <canvas
+              id="truthCanvas"
+              width="384"
+              height="384"
+              aria-label="Binary future actor ground truth"
+            ></canvas>
+            <p class="caption">Future truth · selected actor footprints</p>
+          </div>
+          <div>
+            <canvas
+              id="predictionCanvas"
+              width="384"
+              height="384"
+              aria-label="Illustrative future actor probabilities"
+            ></canvas>
+            <p class="caption">Toy forecast · brighter means higher p</p>
+          </div>
+          <div>
+            <canvas
+              id="errorCanvas"
+              width="384"
+              height="384"
+              aria-label="Thresholded prediction errors"
+            ></canvas>
+            <p class="caption">Green TP · red FP · amber FN · dark TN</p>
+          </div>
+        </div>
+        <div id="metrics" class="metricstrip" aria-live="polite"></div>
+        <button id="saveExample">Save synthetic example metrics</button>
+        <p class="caption" id="counts"></p>
+        <p>
+          IoU = TP/(TP+FP+FN). Precision asks how many predicted positives were
+          right; recall asks how many true positives were found. Brier and NLL
+          use unthresholded probabilities. Try changing only the threshold:
+          overlap changes, probability scores do not.
+        </p>
+        <details>
+          <summary>How the real evaluation will differ</summary>
+          <p>
+            Report every horizon (0.5/1/2/3 s), average precision, Brier, NLL
+            and reliability with support counts. Use fixed grouped episode
+            splits, calibration separate from test, moving/pedestrian/occlusion
+            slices, three final training seeds and paired scenario-group
+            bootstrap intervals. Compare learned persistence and causal
+            sensor-derived constant velocity; identify stronger-input oracle
+            baselines separately. Undefined ratios are null, not perfect scores.
+            The sandbox uses all 16,384 cells as valid and clamps NLL
+            probabilities to [10⁻⁶, 1−10⁻⁶].
+          </p>
+          <p>
+            The eventual speed goal is 5 Hz and p95 pipeline &lt;200 ms on the
+            actual Windows hardware. No latency, accuracy or model-memory
+            measurements exist yet.
+          </p>
+        </details>
+        <h3>Optional motion head: direction matters</h3>
+        <div class="workspace">
+          <div class="visual flowcanvas">
+            <canvas
+              id="flowCanvas"
+              width="720"
+              height="260"
+              aria-label="Backward flow from a future actor cell to its current material correspondence"
+            ></canvas>
+          </div>
+          <div>
+            <p id="flowText"></p>
+            <p>
+              Proposed backward displacement is <code>q_at_t0 − q_at_h</code> in
+              meters, in E₀. The diagram uses pure translation; rotating actors
+              require rigid actor-local correspondence. Mask births, ambiguous
+              overlaps and source-outside-ROI correspondences. Direct occupancy
+              still handles actors without a source at t₀.
+            </p>
+            <code>Optional head: [B, 4, 2, 128, 128]</code>
+            <p class="note">
+              Flow is an experimental extension, not a v1 output. Marginal
+              occupancy probabilities also do not define coherent sampled
+              trajectories or calibrated collision risk.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="roadmap">
+        <div class="eyebrow">06 / Build in evidence-gated phases</div>
+        <h2>The route to a working system.</h2>
+        <p>
+          Completed: research, proposed specification and the visual companion.
+          Current project work: Phase 0 learning and planning on Mac. Model
+          implementation, data collection and training have not started.
+        </p>
+        <div id="phases"></div>
+        <p>
+          Phase 4 is the first prototype finish line. Phase 5 is optional;
+          evaluation and a reproducible demo follow. A completed experiment may
+          produce a negative result—passing a scientific workflow is not the
+          same as meeting the performance gate.
+        </p>
+      </section>
+      <footer>
+        <strong>One file. No server, build step or network required.</strong>
+        <p>
+          This companion reflects the proposed
+          <code>actor-bev-v1-proposed</code> contract. Its examples are
+          deterministic teaching simulations. It does not execute the planned
+          model, load a checkpoint or validate real sensor data.
+        </p>
+        <p>
+          For project work: <a href="../LEARNING.md">learning sequence</a> ·
+          <a href="../ROADMAP.md">full roadmap</a> ·
+          <a href="../docs/architecture.md">architecture contract</a> ·
+          <a href="../docs/dataset-strategy.md">dataset contract</a> ·
+          <a href="../docs/evaluation-strategy.md">evaluation contract</a> ·
+          <a href="../docs/references.md">research sources</a>
+        </p>
+        <details>
+          <summary>Maintenance and evidence policy</summary>
+          <p>
+            Maintain these supplemental lessons alongside the primary playground
+            in index.html when architecture, label, evaluation or phase-status
+            concepts change. The embedded CONTRACT block and all related
+            explanations must agree with ../docs/v1-proposed.json and the owning
+            documents. Preserve the distinction between proposed, implemented
+            and measured. Replace toy results only with identified artifacts and
+            provenance; do not silently present synthetic examples as model
+            outputs. The page is an offline snapshot, not an automatically
+            synchronized training monitor.
+          </p>
+        </details>
+      </footer>
+    </main>
+    <noscript
+      >JavaScript is disabled. The written explanations remain available; enable
+      JavaScript for simulations, diagrams and controls.</noscript
+    >
+    <script>
+      "use strict";
+      // MAINTENANCE: mirror ../docs/v1-proposed.json when changing the contract.
+      const CONTRACT = {
+        schema: "actor-bev-v1-proposed",
+        extent: [-32, 32],
+        resolution: 0.5,
+        size: 128,
+        history: [-1, -0.8, -0.6, -0.4, -0.2, 0],
+        horizons: [0.5, 1, 2, 3],
+        channels: 4,
+        widths: [32, 64, 128, 256],
+        auxWeight: 0.25,
+      };
+      const $ = (id) => document.getElementById(id),
+        C = {
+          bg: "#172124",
+          grid: "#2a393c",
+          ink: "#e8efec",
+          muted: "#abc0bd",
+          green: "#a6efb4",
+          amber: "#efbd79",
+          blue: "#89b8df",
+          red: "#ed9292",
+        };
+      const state = {
+        time: 0,
+        cell: [64, 84],
+        stage: 0,
+        layer: 0,
+        fusion: 0,
+        playing: false,
+      };
+      const on = (id, event, fn) => $(id).addEventListener(event, fn),
+        checked = (id) => $(id).checked,
+        num = (id) => Number($(id).value);
+      function ctx(id) {
+        const canvas = $(id),
+          g = canvas.getContext("2d");
+        g.clearRect(0, 0, canvas.width, canvas.height);
+        g.fillStyle = C.bg;
+        g.fillRect(0, 0, canvas.width, canvas.height);
+        g.font = "13px system-ui";
+        return g;
+      }
+      function line(g, x1, y1, x2, y2, color, width = 1) {
+        g.strokeStyle = color;
+        g.lineWidth = width;
+        g.beginPath();
+        g.moveTo(x1, y1);
+        g.lineTo(x2, y2);
+        g.stroke();
+      }
+      function arrow(g, x1, y1, x2, y2, color) {
+        line(g, x1, y1, x2, y2, color, 2);
+        const a = Math.atan2(y2 - y1, x2 - x1);
+        line(
+          g,
+          x2,
+          y2,
+          x2 - 9 * Math.cos(a - 0.45),
+          y2 - 9 * Math.sin(a - 0.45),
+          color,
+          2,
+        );
+        line(
+          g,
+          x2,
+          y2,
+          x2 - 9 * Math.cos(a + 0.45),
+          y2 - 9 * Math.sin(a + 0.45),
+          color,
+          2,
+        );
+      }
+      function text(g, s, x, y, color = C.muted) {
+        g.fillStyle = color;
+        g.fillText(s, x, y);
+      }
+      function mapCanvas(g, pad = 35) {
+        const w = g.canvas.width,
+          h = g.canvas.height,
+          size = Math.min(w - 2 * pad, h - 2 * pad),
+          left = (w - size) / 2,
+          top = (h - size) / 2;
+        return {
+          size,
+          left,
+          top,
+          scale: size / 64,
+          xy: (x, y) => [
+            left + ((x + 32) * size) / 64,
+            top + ((32 - y) * size) / 64,
+          ],
+        };
+      }
+      function grid(g, m) {
+        for (let x = -32; x <= 32; x += 8) {
+          let a = m.xy(x, -32),
+            b = m.xy(x, 32);
+          line(g, ...a, ...b, C.grid);
+          a = m.xy(-32, x);
+          b = m.xy(32, x);
+          line(g, ...a, ...b, C.grid);
+        }
+        let z = m.xy(0, 0),
+          x = m.xy(28, 0),
+          y = m.xy(0, 28);
+        arrow(g, ...z, ...x, "#526862");
+        arrow(g, ...z, ...y, "#526862");
+        text(g, "+x", x[0] + 4, x[1] + 15);
+        text(g, "+y", y[0] + 6, y[1]);
+      }
+      function objects(t) {
+        let o = [];
+        if (checked("structures"))
+          o.push(
+            { x: 14, y: 15, w: 17, h: 3, kind: "wall" },
+            { x: -19, y: -15, w: 4, h: 18, kind: "wall" },
+          );
+        if (checked("stopped"))
+          o.push({ x: 19, y: -7, w: 4.5, h: 2, kind: "stopped" });
+        if (checked("moving"))
+          o.push(
+            { x: 5 + 4 * t, y: 5 + 0.35 * t * t, w: 4.5, h: 2, kind: "car" },
+            { x: 12, y: -8 + 1.6 * t, w: 0.8, h: 0.8, kind: "person" },
+          );
+        return o;
+      }
+      function ego(t) {
+        return { x: 3 * t, y: 0, a: 0.12 * t };
+      }
+      function local(p, e) {
+        const dx = p[0] - e.x,
+          dy = p[1] - e.y;
+        return [
+          Math.cos(e.a) * dx + Math.sin(e.a) * dy,
+          -Math.sin(e.a) * dx + Math.cos(e.a) * dy,
+        ];
+      }
+      function world(p, e) {
+        return [
+          e.x + Math.cos(e.a) * p[0] - Math.sin(e.a) * p[1],
+          e.y + Math.sin(e.a) * p[0] + Math.cos(e.a) * p[1],
+        ];
+      }
+      function rayBox(ox, oy, dx, dy, o) {
+        let lo = 0,
+          hi = 60;
+        for (const [v, d, c, s] of [
+          [ox, dx, o.x, o.w],
+          [oy, dy, o.y, o.h],
+        ]) {
+          if (Math.abs(d) < 1e-10) {
+            if (v < c - s / 2 || v > c + s / 2) return null;
+          } else {
+            let a = (c - s / 2 - v) / d,
+              b = (c + s / 2 - v) / d;
+            lo = Math.max(lo, Math.min(a, b));
+            hi = Math.min(hi, Math.max(a, b));
+          }
+        }
+        return hi >= lo && hi > 0 ? lo : null;
+      }
+      function scan(t) {
+        const e = ego(t),
+          obs = objects(t),
+          hits = [];
+        for (let k = 0; k < 480; k++) {
+          const a = (k * 2 * Math.PI) / 480 + e.a,
+            dx = Math.cos(a),
+            dy = Math.sin(a);
+          let distance = 60,
+            obj = null;
+          for (const o of obs) {
+            const d = rayBox(e.x, e.y, dx, dy, o);
+            if (d !== null && d < distance) {
+              distance = d;
+              obj = o;
+            }
+          }
+          if (obj)
+            hits.push({
+              world: [e.x + distance * dx, e.y + distance * dy],
+              origin: [e.x, e.y],
+              kind: obj.kind,
+              height:
+                obj.kind === "person" ? 1.7 : obj.kind === "wall" ? 3 : 1.5,
+            });
+        }
+        return hits;
+      }
+      function gridIndex(x, y) {
+        const j = Math.floor((x + 32) / 0.5),
+          i = Math.floor((y + 32) / 0.5);
+        return i >= 0 && i < 128 && j >= 0 && j < 128 ? i * 128 + j : -1;
+      }
+      function evidence() {
+        const counts = new Float32Array(16384),
+          height = new Float32Array(16384),
+          traversal = new Uint8Array(16384);
+        for (const p of scan(0)) {
+          const k = gridIndex(...p.world);
+          if (k >= 0) {
+            counts[k]++;
+            height[k] = Math.max(height[k], p.height / 4);
+          }
+          const dx = p.world[0] - p.origin[0],
+            dy = p.world[1] - p.origin[1],
+            n = Math.ceil(Math.hypot(dx, dy) / 0.2);
+          for (let s = 0; s < n; s++) {
+            const j = gridIndex(
+              p.origin[0] + (dx * s) / n,
+              p.origin[1] + (dy * s) / n,
+            );
+            if (j >= 0 && j !== k) traversal[j] = 1;
+          }
+        }
+        return { counts, height, traversal };
+      }
+      function truthAt(x, y, h) {
+        return objects(h).some(
+          (o) =>
+            o.kind !== "wall" &&
+            Math.abs(x - o.x) < o.w / 2 + 0.25 - 1e-9 &&
+            Math.abs(y - o.y) < o.h / 2 + 0.25 - 1e-9,
+        )
+          ? 1
+          : 0;
+      }
+      function probAt(x, y, h) {
+        let p = 0.01;
+        const spread = num("spread"),
+          bias = num("bias");
+        for (const o of objects(h)) {
+          if (o.kind === "wall") continue;
+          const bx = o.x + (o.kind === "car" ? (bias * h) / 2 : 0),
+            by = o.y + (o.kind === "person" ? (bias * h) / 4 : 0),
+            dx = Math.max(0, Math.abs(x - bx) - o.w / 2),
+            dy = Math.max(0, Math.abs(y - by) - o.h / 2);
+          p = Math.max(
+            p,
+            0.88 * Math.exp(-(dx * dx + dy * dy) / (2 * spread * spread)),
+          );
+        }
+        return p;
+      }
+      function paintProb(g, m, h) {
+        for (let i = 0; i < 128; i++)
+          for (let j = 0; j < 128; j++) {
+            const p = probAt(-32 + (j + 0.5) * 0.5, -32 + (i + 0.5) * 0.5, h);
+            if (p < 0.04) continue;
+            g.fillStyle = `rgba(166,239,180,${p * 0.7})`;
+            g.fillRect(
+              m.left + (j * m.size) / 128,
+              m.top + ((127 - i) * m.size) / 128,
+              m.size / 128 + 0.1,
+              m.size / 128 + 0.1,
+            );
+          }
+      }
+      function box(g, m, o, color, filled = false) {
+        const [x, y] = m.xy(o.x - o.w / 2, o.y + o.h / 2);
+        g.strokeStyle = color;
+        g.fillStyle = color;
+        g.lineWidth = 1.5;
+        if (filled) {
+          g.globalAlpha = 0.2;
+          g.fillRect(x, y, o.w * m.scale, o.h * m.scale);
+          g.globalAlpha = 1;
+        }
+        g.strokeRect(x, y, o.w * m.scale, o.h * m.scale);
+      }
+      let evidenceCache = evidence();
+      function drawScene() {
+        const g = ctx("sceneCanvas"),
+          m = mapCanvas(g),
+          h = num("horizon");
+        if (checked("forecast")) paintProb(g, m, h);
+        grid(g, m);
+        for (const o of objects(state.time))
+          box(g, m, o, o.kind === "wall" ? C.blue : C.amber, true);
+        if (checked("history")) {
+          for (const t of CONTRACT.history) {
+            g.globalAlpha = 0.25 + 0.65 * (t + 1);
+            for (const hit of scan(t)) {
+              const p = checked("compensate")
+                ? hit.world
+                : local(hit.world, ego(t));
+              const q = m.xy(...p);
+              g.fillStyle = C.green;
+              g.fillRect(q[0] - 1, q[1] - 1, 2, 2);
+            }
+          }
+          g.globalAlpha = 1;
+        }
+        if (state.time <= 0) {
+          for (const hit of scan(state.time)) {
+            const p = m.xy(...hit.world),
+              o = m.xy(...hit.origin);
+            if (checked("rays")) line(g, ...o, ...p, "#a6efb425");
+            g.fillStyle = C.green;
+            g.fillRect(p[0] - 1.3, p[1] - 1.3, 2.6, 2.6);
+          }
+        }
+        const e = ego(state.time),
+          z = m.xy(e.x, e.y);
+        arrow(
+          g,
+          z[0],
+          z[1],
+          z[0] + Math.cos(e.a) * 22,
+          z[1] - Math.sin(e.a) * 22,
+          C.amber,
+        );
+        text(g, "ego", z[0] - 10, z[1] + 22, C.amber);
+        const [i, j] = state.cell,
+          q = m.xy(-32 + j * 0.5, -32 + (i + 1) * 0.5);
+        g.strokeStyle = "white";
+        g.lineWidth = 2;
+        g.strokeRect(q[0], q[1], m.scale * 0.5, m.scale * 0.5);
+        $("sceneTitle").textContent =
+          state.time === 0
+            ? "Anchor t = 0 s"
+            : `${state.time < 0 ? "History" : "Future truth"} t ${state.time > 0 ? "+" : "−"} ${Math.abs(state.time).toFixed(1)} s`;
+        $("timeExplanation").textContent =
+          state.time > 0
+            ? "Future outlines are illustrative ground truth, revealed for teaching only. The forecast and six input frames remain anchored at t = 0."
+            : "Outlines show this selected instant. Faded returns show the six historical observations; the forecast always starts at t = 0.";
+        $("alignmentExplanation").textContent = checked("compensate")
+          ? "Aligned history: structures coincide; moving actors retain their trails."
+          : "Unaligned history: local sensor coordinates are incorrectly overlaid. Structure trails reveal ego motion. The amber scene outline remains in correct E₀.";
+        const k = i * 128 + j,
+          x = -32 + (j + 0.5) * 0.5,
+          y = -32 + (i + 0.5) * 0.5;
+        $("cellReadout").textContent =
+          `row i = ${i} · column j = ${j}\ncenter = (${x.toFixed(2)}, ${y.toFixed(2)}) m\ncurrent returns = ${evidenceCache.counts[k]}\ntraversal evidence = ${evidenceCache.traversal[k]}\nno selected evidence = ${!(evidenceCache.counts[k] || evidenceCache.traversal[k])}\np(actor at +${h}s) = ${probAt(x, y, h).toFixed(3)}\nfuture truth Y = ${truthAt(x, y, h)}`;
+        for (const b of $("timeline").children) {
+          const active = Number(b.dataset.time) === state.time;
+          b.classList.toggle("active", active);
+          b.setAttribute("aria-pressed", active);
+        }
+      }
+      for (const t of [...CONTRACT.history, ...CONTRACT.horizons]) {
+        const b = document.createElement("button");
+        b.dataset.time = t;
+        b.textContent =
+          t === 0 ? "t = 0" : `${t > 0 ? "+" : ""}${t.toFixed(1)}s`;
+        b.onclick = () => {
+          state.time = t;
+          drawScene();
+        };
+        $("timeline").append(b);
+      }
+      on("sceneCanvas", "click", (e) => {
+        const r = $("sceneCanvas").getBoundingClientRect(),
+          g = $("sceneCanvas").getContext("2d"),
+          m = mapCanvas(g),
+          x = ((e.clientX - r.left) * 720) / r.width,
+          y = ((e.clientY - r.top) * 620) / r.height,
+          j = Math.floor(((x - m.left) / m.size) * 128),
+          i = 127 - Math.floor(((y - m.top) / m.size) * 128);
+        if (i >= 0 && i < 128 && j >= 0 && j < 128) {
+          state.cell = [i, j];
+          drawScene();
+        }
+      });
+      on("sceneCanvas", "keydown", (e) => {
+        if (
+          !["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)
+        )
+          return;
+        e.preventDefault();
+        let [i, j] = state.cell;
+        if (e.key === "ArrowUp") i++;
+        if (e.key === "ArrowDown") i--;
+        if (e.key === "ArrowLeft") j--;
+        if (e.key === "ArrowRight") j++;
+        state.cell = [
+          Math.max(0, Math.min(127, i)),
+          Math.max(0, Math.min(127, j)),
+        ];
+        drawScene();
+      });
+      let timer;
+      function stop() {
+        state.playing = false;
+        clearInterval(timer);
+        $("play").textContent = "Play timeline";
+      }
+      on("play", "click", () => {
+        if (state.playing) {
+          stop();
+          return;
+        }
+        state.playing = true;
+        $("play").textContent = "Pause timeline";
+        const ts = [...CONTRACT.history, ...CONTRACT.horizons];
+        timer = setInterval(() => {
+          state.time = ts[(ts.indexOf(state.time) + 1) % ts.length];
+          drawScene();
+        }, 800);
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop();
+      });
+      on("resetScene", "click", () => {
+        stop();
+        state.time = 0;
+        state.cell = [64, 84];
+        [
+          "structures",
+          "moving",
+          "stopped",
+          "history",
+          "compensate",
+          "forecast",
+        ].forEach((id) => ($(id).checked = true));
+        $("rays").checked = false;
+        $("horizon").value = "2";
+        $("bias").value = "1";
+        $("spread").value = ".75";
+        $("threshold").value = ".5";
+        refresh();
+      });
+      function drawTransform() {
+        const g = ctx("transformCanvas"),
+          yaw = (num("yaw") * Math.PI) / 180,
+          tx = num("tx"),
+          p = world([10, 4], { x: tx, y: 2, a: yaw }),
+          q = [p[0] - 3, p[1] + 2];
+        const xy = (x, y) => [330 + x * 14, 255 - y * 14];
+        for (let x = -20; x <= 25; x += 5) {
+          line(g, ...xy(x, -10), ...xy(x, 15), C.grid);
+          line(g, ...xy(-20, x), ...xy(25, x), C.grid);
+        }
+        function axes(x, y, a, color, label) {
+          const o = xy(x, y);
+          arrow(
+            g,
+            ...o,
+            ...xy(x + 5 * Math.cos(a), y + 5 * Math.sin(a)),
+            color,
+          );
+          arrow(
+            g,
+            ...o,
+            ...xy(x - 5 * Math.sin(a), y + 5 * Math.cos(a)),
+            color,
+          );
+          text(g, label, o[0] - 12, o[1] + 24, color);
+        }
+        axes(0, 0, 0, C.muted, "World");
+        axes(3, -2, 0, C.amber, "E₀");
+        axes(tx, 2, yaw, C.green, "Sensor");
+        arrow(g, ...xy(tx, 2), ...xy(...p), C.green);
+        arrow(g, ...xy(3, -2), ...xy(...p), C.amber);
+        const dot = xy(...p);
+        g.fillStyle = C.ink;
+        g.beginPath();
+        g.arc(...dot, 5, 0, Math.PI * 2);
+        g.fill();
+        text(g, "same return", dot[0] + 10, dot[1] - 8, C.ink);
+        $("yawValue").textContent = `${num("yaw")}°`;
+        $("txValue").textContent = `${tx} m`;
+        $("transformReadout").textContent =
+          `p_S = (10.00, 4.00)\np_W = (${p[0].toFixed(2)}, ${p[1].toFixed(2)})\np_E₀ = (${q[0].toFixed(2)}, ${q[1].toFixed(2)})\n\nrotation → translation → E₀ inverse`;
+      }
+      ["yaw", "tx"].forEach((id) => on(id, "input", drawTransform));
+      const stages = [
+        [
+          "Raw LiDAR",
+          "6 × Nₖ × 4 + poses",
+          "Variable-length xyz/intensity returns, exact frame IDs and sensor poses. Intensity is stored but not used as a default feature. Green samples in this panel are synthetic ray endpoints.",
+          "Only past/current sensors and ego state enter inference.",
+        ],
+        [
+          "Align",
+          "6 point clouds in E₀",
+          "Convert handedness, then map each sensor frame into the frozen current ego frame. Preserve the six time slots; moving actor trails remain meaningful.",
+          "Ray origins need the same transform as their endpoints.",
+        ],
+        [
+          "BEV evidence",
+          "[B, 6, 4, 128, 128]",
+          "Rasterize each aligned frame into density, max height above estimated ground, obstacle hit and partial ray traversal evidence. This panel shows the anchor frame.",
+          "2D ray/height illustration only. Real traversal is height-aware; no-return rays never prove free space.",
+        ],
+        [
+          "Stack + encode",
+          "[B, 24, 128, 128] → [B, 256, 16, 16]",
+          "Time-major stacking preserves six ordered slots. Padded spatial convolutions mix space and time; downsampling builds context. Feature strips here are a shape diagram, not learned activations.",
+          "Alignment is geometric; convolution learns how evidence should influence the forecast.",
+        ],
+        [
+          "Decode + heads",
+          "[B, 4, 128, 128] logits",
+          "Upsample with encoder skips. A 1×1 head predicts four future logits; a separate optional current head produces one logit map.",
+          "Four independent horizons, not four mutually exclusive classes.",
+        ],
+        [
+          "Probabilities",
+          "sigmoid(logits) → p(actor)",
+          "Return per-cell future probabilities plus anchor timestamp, E₀ transform, grid metadata, horizons, model/calibration identity and freshness.",
+          "Displayed probabilities come from an analytic toy, not the proposed U-Net.",
+        ],
+      ];
+      stages.forEach((s, i) => {
+        const b = document.createElement("button");
+        b.innerHTML = `${i + 1}. ${s[0]}<small>${i === 0 ? "Sensor input" : i === 5 ? "Forecast output" : "Intermediate representation"}</small>`;
+        b.onclick = () => {
+          state.stage = i;
+          drawPipeline();
+        };
+        $("pipelineSteps").append(b);
+      });
+      function drawPipeline() {
+        const n = state.stage,
+          s = stages[n],
+          g = ctx("pipelineCanvas"),
+          m = mapCanvas(g);
+        $("pipelineCaption").textContent =
+          `STAGE ${n + 1} / ${s[0].toUpperCase()}`;
+        $("stageTitle").textContent = s[0];
+        $("stageShape").textContent = s[1];
+        $("stageText").textContent = s[2];
+        $("stageCaution").textContent = s[3];
+        $("prevStage").disabled = n === 0;
+        $("nextStage").disabled = n === 5;
+        $("channel").disabled = n !== 2;
+        [...$("pipelineSteps").children].forEach((b, i) =>
+          b.setAttribute("aria-pressed", i === n),
+        );
+        if (n === 0 || n === 1) {
+          grid(g, m);
+          for (const t of CONTRACT.history) {
+            g.globalAlpha = 0.25 + 0.75 * (t + 1);
+            for (const p of scan(t)) {
+              const q = m.xy(...(n === 0 ? local(p.world, ego(t)) : p.world));
+              g.fillStyle = C.green;
+              g.fillRect(q[0] - 1, q[1] - 1, 2, 2);
+            }
+          }
+          g.globalAlpha = 1;
+          text(
+            g,
+            n === 0
+              ? "Six local sensor frames overlaid BEFORE alignment"
+              : "Six frames transformed into E₀",
+            22,
+            25,
+            C.ink,
+          );
+        } else if (n === 2) {
+          grid(g, m);
+          const a = evidenceCache,
+            channel = $("channel").value;
+          for (let i = 0; i < 128; i++)
+            for (let j = 0; j < 128; j++) {
+              const k = i * 128 + j,
+                v =
+                  channel === "density"
+                    ? Math.min(Math.log1p(a.counts[k]) / Math.log(33), 1)
+                    : channel === "height"
+                      ? a.height[k]
+                      : channel === "hit"
+                        ? Number(a.counts[k] > 0)
+                        : a.traversal[k];
+              if (!v) continue;
+              g.fillStyle = `rgba(166,239,180,${0.15 + 0.85 * v})`;
+              g.fillRect(
+                m.left + (j * m.size) / 128,
+                m.top + ((127 - i) * m.size) / 128,
+                m.size / 128 + 0.2,
+                m.size / 128 + 0.2,
+              );
+            }
+          text(
+            g,
+            channel === "density"
+              ? "min(log(1 + count) / log(33), 1)"
+              : channel === "height"
+                ? "synthetic obstacle height / 4 m"
+                : channel === "hit"
+                  ? "1 if an obstacle return ends in the cell"
+                  : "1 if a returning ray passes before its endpoint",
+            20,
+            25,
+            C.ink,
+          );
+        } else if (n === 3 || n === 4) {
+          const widths = n === 3 ? [128, 64, 32, 16] : [16, 32, 64, 128];
+          widths.forEach((w, i) => {
+            const x = 65 + i * 160,
+              y = 230 - w * 0.7;
+            for (let k = 3; k >= 0; k--) {
+              g.fillStyle = `rgb(${35 + k * 9},${65 + k * 12},${52 + k * 8})`;
+              g.fillRect(x + k * 5, y - k * 5, w, w);
+            }
+            text(g, `${w} × ${w}`, x, 330);
+            if (i < 3) arrow(g, x + w + 12, 240, x + 145, 240, C.muted);
+          });
+          text(
+            g,
+            n === 3
+              ? "Spatial context grows as resolution shrinks"
+              : "Upsample + encoder skip → local detail",
+            30,
+            55,
+            C.ink,
+          );
+          text(
+            g,
+            "Dimensions only · these are not measured activations",
+            30,
+            440,
+          );
+        } else {
+          paintProb(g, m, num("horizon"));
+          grid(g, m);
+          for (const o of objects(num("horizon")).filter(
+            (o) => o.kind !== "wall",
+          ))
+            box(g, m, o, C.amber);
+          text(
+            g,
+            `Toy forecast at +${num("horizon")} s · truth outlines`,
+            20,
+            25,
+            C.ink,
+          );
+        }
+      }
+      on("prevStage", "click", () => {
+        state.stage = Math.max(0, state.stage - 1);
+        drawPipeline();
+      });
+      on("nextStage", "click", () => {
+        state.stage = Math.min(5, state.stage + 1);
+        drawPipeline();
+      });
+      on("channel", "change", drawPipeline);
+      const layers = [
+        [
+          "Stack",
+          "24 × 128²",
+          "[B,24,128,128]",
+          "Six ordered frames × four evidence channels. Fixed slots encode time.",
+        ],
+        [
+          "Enc 0",
+          "32 × 128²",
+          "[B,32,128,128]",
+          "Full-resolution features; skip connection to decoder 0.",
+        ],
+        [
+          "Enc 1",
+          "64 × 64²",
+          "[B,64,64,64]",
+          "2× downsampling; skip to decoder 1.",
+        ],
+        [
+          "Enc 2",
+          "128 × 32²",
+          "[B,128,32,32]",
+          "Wider context at quarter resolution; skip to decoder 2.",
+        ],
+        [
+          "Bottleneck",
+          "256 × 16²",
+          "[B,256,16,16]",
+          "Deepest spatial features at one-eighth resolution.",
+        ],
+        [
+          "Dec 2",
+          "128 × 32²",
+          "[B,128,32,32]",
+          "Bilinear upsampling, concatenate encoder 2 skip, then convolution block.",
+        ],
+        [
+          "Dec 1",
+          "64 × 64²",
+          "[B,64,64,64]",
+          "Upsample, concatenate encoder 1 skip and refine.",
+        ],
+        [
+          "Dec 0",
+          "32 × 128²",
+          "[B,32,128,128]",
+          "Upsample, concatenate encoder 0 skip and restore full grid resolution.",
+        ],
+        [
+          "Heads",
+          "4 future + 1",
+          "future [B,4,128,128]\ncurrent [B,1,128,128]",
+          "Independent 1×1 heads output logits; sigmoid only for probability inference. Future channels are +0.5, +1, +2, +3 seconds.",
+        ],
+      ];
+      function selectLayer(i) {
+        state.layer = i;
+        $("layerTitle").textContent = layers[i][0];
+        $("layerShape").textContent = layers[i][2];
+        $("layerText").textContent = layers[i][3];
+        [...$("unet").children].forEach((b, j) =>
+          b.setAttribute("aria-pressed", i === j),
+        );
+      }
+      layers.forEach((l, i) => {
+        const b = document.createElement("button");
+        b.innerHTML = `<b>${l[0]}</b><small>${l[1]}</small>`;
+        b.style.height = `${[180, 180, 150, 120, 90, 120, 150, 180, 180][i]}px`;
+        b.title = l[2] + " — " + l[3];
+        b.onmouseenter = b.onfocus = b.onclick = () => selectLayer(i);
+        $("unet").append(b);
+      });
+      const fusions = [
+        [
+          "Stack + CNN",
+          "v1 default",
+          "Stack all frames as channels. A spatial convolution mixes the six time slots immediately. Fast and simple, but tied to fixed history length and order.",
+          "[B,6,4,128,128] → [B,24,128,128]",
+          "No persistent state. Compare against a single-frame forecaster to measure the value of history.",
+        ],
+        [
+          "Temporal conv",
+          "First challenger",
+          "A shared spatial encoder extracts each frame independently, then temporal kernels combine nearby time slots. This separates spatial extraction from temporal mixing.",
+          "per-frame encoder → temporal 1D/3D conv → decoder",
+          "Fixed temporal receptive field; compare at matched training and capacity budgets.",
+        ],
+        [
+          "ConvGRU",
+          "Main recurrence challenger",
+          "Read oldest to newest. Spatial gates combine incoming features with hidden memory. The final state decodes into the same forecast heads.",
+          "[B,6,128,32,32] → hidden [B,128,32,32]",
+          "Reset state per window. Persistent streaming memory requires ego warping and episode resets.",
+        ],
+        [
+          "ConvLSTM",
+          "Optional recurrence",
+          "Like a spatial recurrent cell, with separate hidden and cell states and input, forget and output gates. Test whether extra memory helps occlusion.",
+          "(featuresₖ, hiddenₖ₋₁, cellₖ₋₁) → (hiddenₖ, cellₖ)",
+          "Extra gates and state cost compute; more complexity does not establish better forecasting.",
+        ],
+        [
+          "Attention",
+          "Later experiment",
+          "At a low-resolution bottleneck, learned attention selects information across time. Encode positions and times; exclude every future observation.",
+          "temporal tokens + positions + causal inputs → decoder",
+          "Full-resolution six-frame attention means 98,304 tokens and ~9.7 billion pair scores per head. Avoid that initial design.",
+        ],
+      ];
+      fusions.forEach((f, i) => {
+        const b = document.createElement("button");
+        b.textContent = f[0];
+        b.onclick = () => {
+          state.fusion = i;
+          drawFusion();
+        };
+        $("fusionButtons").append(b);
+      });
+      function drawFusion() {
+        const i = state.fusion,
+          f = fusions[i],
+          g = ctx("fusionCanvas");
+        $("fusionTitle").textContent = f[0] + " · " + f[1];
+        $("fusionText").textContent = f[2];
+        $("fusionShape").textContent = f[3];
+        $("fusionCaution").textContent = f[4];
+        [...$("fusionButtons").children].forEach((b, j) =>
+          b.setAttribute("aria-pressed", i === j),
+        );
+        for (let k = 0; k < 6; k++) {
+          const x = 30 + k * 96;
+          g.fillStyle = "#294337";
+          g.fillRect(x, 25, 65, 40);
+          text(g, `${CONTRACT.history[k].toFixed(1)}s`, x + 10, 50, C.green);
+          if (i === 2 || i === 3) {
+            g.strokeStyle = C.green;
+            g.strokeRect(x, 115, 65, 40);
+            text(g, i === 3 ? "h + c" : "h", x + 16, 140, C.green);
+            arrow(g, x + 32, 70, x + 32, 110, C.muted);
+            if (k < 5) arrow(g, x + 67, 135, x + 92, 135, C.green);
+          } else {
+            arrow(g, x + 32, 70, 325, 145, i === 4 ? "#a6efb450" : C.muted);
+          }
+        }
+        if (i < 2 || i === 4) {
+          g.fillStyle = "#294337";
+          g.fillRect(210, 150, 230, 45);
+          text(
+            g,
+            i === 0
+              ? "stack → convolution"
+              : i === 1
+                ? "shared features → temporal conv"
+                : "bottleneck temporal attention",
+            220,
+            177,
+            C.green,
+          );
+        } else
+          text(
+            g,
+            "oldest → newest · final memory → decoder",
+            135,
+            198,
+            C.muted,
+          );
+      }
+      function drawTarget() {
+        const g = ctx("targetCanvas"),
+          r = 40,
+          x = 125 + num("boxOffset") * 80,
+          y = 95,
+          w = 160,
+          h = 80;
+        let count = 0;
+        for (let i = 0; i < 6; i++)
+          for (let j = 0; j < 12; j++) {
+            const cx = 55 + j * r,
+              cy = 45 + i * r,
+              hit =
+                Math.min(cx + r, x + w) - Math.max(cx, x) > 1e-8 &&
+                Math.min(cy + r, y + h) - Math.max(cy, y) > 1e-8;
+            g.fillStyle = hit ? "#406b4b" : C.bg;
+            g.fillRect(cx, cy, r, r);
+            g.strokeStyle = C.grid;
+            g.strokeRect(cx, cy, r, r);
+            if (hit) count++;
+          }
+        g.strokeStyle = C.amber;
+        g.lineWidth = 3;
+        g.strokeRect(x, y, w, h);
+        text(
+          g,
+          `${count} positive cells · amber box / green raster`,
+          55,
+          320,
+          C.ink,
+        );
+        $("offsetValue").textContent = `${num("boxOffset").toFixed(2)} m`;
+      }
+      function drawLoss() {
+        const g = ctx("lossCanvas"),
+          p = num("probability"),
+          y = num("target"),
+          valid = checked("valid"),
+          loss = -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
+        for (let i = 0; i <= 5; i++) {
+          line(g, 60, 285 - i * 48, 680, 285 - i * 48, C.grid);
+          text(g, String(i), 34, 290 - i * 48);
+        }
+        for (const target of [0, 1]) {
+          g.beginPath();
+          for (let k = 1; k < 100; k++) {
+            const q = k / 100,
+              l = -(target * Math.log(q) + (1 - target) * Math.log(1 - q)),
+              x = 60 + q * 620,
+              yy = 285 - l * 48;
+            k === 1 ? g.moveTo(x, yy) : g.lineTo(x, yy);
+          }
+          g.strokeStyle = target ? C.green : C.amber;
+          g.lineWidth = 2;
+          g.stroke();
+        }
+        const x = 60 + p * 620,
+          yy = 285 - loss * 48;
+        line(g, x, 285, x, yy, C.ink);
+        g.fillStyle = valid ? C.ink : C.muted;
+        g.beginPath();
+        g.arc(x, yy, 6, 0, Math.PI * 2);
+        g.fill();
+        text(g, "p = 0", 60, 315);
+        text(g, "p = 1", 630, 315);
+        text(g, "y = 1", 100, 30, C.green);
+        text(g, "y = 0", 550, 30, C.amber);
+        $("probabilityValue").textContent = p.toFixed(2);
+        $("lossReadout").textContent =
+          `BCE = ${loss.toFixed(4)}\nmask M = ${Number(valid)}\nloss numerator contribution = ${(valid ? loss : 0).toFixed(4)}\nvalid-cell denominator contribution = ${Number(valid)}`;
+      }
+      function computeMetrics() {
+        const h = num("horizon"),
+          threshold = num("threshold"),
+          truth = new Uint8Array(16384),
+          probs = new Float32Array(16384);
+        let tp = 0,
+          fp = 0,
+          fn = 0,
+          tn = 0,
+          brier = 0,
+          nll = 0;
+        for (let i = 0; i < 128; i++)
+          for (let j = 0; j < 128; j++) {
+            const k = i * 128 + j,
+              x = -32 + (j + 0.5) * 0.5,
+              y = -32 + (i + 0.5) * 0.5,
+              t = truthAt(x, y, h),
+              p = probAt(x, y, h),
+              pred = p >= threshold;
+            truth[k] = t;
+            probs[k] = p;
+            if (t && pred) tp++;
+            else if (!t && pred) fp++;
+            else if (t && !pred) fn++;
+            else tn++;
+            brier += (p - t) ** 2;
+            nll -=
+              t * Math.log(Math.max(1e-6, p)) +
+              (1 - t) * Math.log(Math.max(1e-6, 1 - p));
+          }
+        return {
+          truth,
+          probs,
+          tp,
+          fp,
+          fn,
+          tn,
+          brier: brier / 16384,
+          nll: nll / 16384,
+        };
+      }
+      function drawEvaluation() {
+        const v = computeMetrics(),
+          threshold = num("threshold");
+        for (const [id, kind] of [
+          ["truthCanvas", "truth"],
+          ["predictionCanvas", "prob"],
+          ["errorCanvas", "error"],
+        ]) {
+          const g = ctx(id);
+          for (let i = 0; i < 128; i++)
+            for (let j = 0; j < 128; j++) {
+              const k = i * 128 + j,
+                t = v.truth[k],
+                p = v.probs[k],
+                pred = p >= threshold;
+              g.fillStyle =
+                kind === "truth"
+                  ? t
+                    ? C.green
+                    : "#19282a"
+                  : kind === "prob"
+                    ? `rgb(${25 + p * 141},${40 + p * 199},${42 + p * 138})`
+                    : t && pred
+                      ? C.green
+                      : !t && pred
+                        ? C.red
+                        : t && !pred
+                          ? C.amber
+                          : "#19282a";
+              g.fillRect(j * 3, (127 - i) * 3, 3, 3);
+            }
+        }
+        const ratio = (n, d) => (d ? (n / d).toFixed(3) : "null");
+        $("metrics").innerHTML = [
+          ["IoU", ratio(v.tp, v.tp + v.fp + v.fn)],
+          ["Precision", ratio(v.tp, v.tp + v.fp)],
+          ["Recall", ratio(v.tp, v.tp + v.fn)],
+          ["Brier", v.brier.toFixed(5)],
+          ["NLL", v.nll.toFixed(5)],
+        ]
+          .map(([k, n]) => `<span>${k}<b>${n}</b></span>`)
+          .join("");
+        $("counts").textContent =
+          `Synthetic +${num("horizon")} s · TP ${v.tp} / FP ${v.fp} / FN ${v.fn} / TN ${v.tn} · 16,384 valid cells · ${v.tp + v.fn} positive cells`;
+        $("thresholdValue").textContent = threshold.toFixed(2);
+        $("biasValue").textContent = `${num("bias")} m`;
+        $("spreadValue").textContent = `${num("spread")} m`;
+        drawFlow();
+      }
+      function drawFlow() {
+        const g = ctx("flowCanvas"),
+          h = num("horizon"),
+          dx = 4 * h,
+          dy = 0.35 * h * h;
+        const x0 = 100,
+          y0 = 155,
+          xh = x0 + dx * 28,
+          yh = y0 - dy * 28;
+        g.setLineDash([5, 4]);
+        g.strokeStyle = C.muted;
+        g.strokeRect(x0 - 35, y0 - 16, 70, 32);
+        g.setLineDash([]);
+        g.strokeStyle = C.green;
+        g.strokeRect(xh - 35, yh - 16, 70, 32);
+        arrow(g, xh, yh, x0, y0, C.amber);
+        text(g, "q at t₀", x0 - 30, y0 + 45);
+        text(g, `q at +${h}s`, xh - 30, yh - 32, C.green);
+        text(g, "backward correspondence", 250, 225, C.amber);
+        $("flowText").textContent =
+          `For this translating car, displacement at +${h} s is (${(-dx).toFixed(2)}, ${(-dy).toFixed(2)}) m: the arrow points from the future position back to its source at t₀. This is a separate correspondence example, independent of the scene visibility toggles.`;
+      }
+      const phases = [
+        [
+          "Foundations & contract",
+          "Understand probability and transforms; validate Windows environment and analytic geometry fixtures.",
+          "Planning / current",
+        ],
+        [
+          "Data & visualization",
+          "Record synchronized episodes → align histories → generate labels → pass data QA.",
+          "Not started",
+        ],
+        [
+          "Evaluation & baselines",
+          "Implement trustworthy metrics, persistence and sensor/oracle constant-velocity comparisons.",
+          "Not started",
+        ],
+        [
+          "Single-frame network",
+          "Overfit a tiny set, then learn current occupancy and a single-frame forecast control.",
+          "Not started",
+        ],
+        [
+          "Temporal forecasting",
+          "Train the six-frame baseline; measure whether history improves motion forecasting.",
+          "Not started",
+        ],
+        [
+          "Targeted extensions",
+          "Only after diagnosed failures: recurrence, flow, attention, camera fusion or uncertainty.",
+          "Optional / later",
+        ],
+        [
+          "Evaluation & optimization",
+          "Freeze candidates, calibrate, evaluate held-out groups and profile the Windows pipeline.",
+          "Not started",
+        ],
+        [
+          "Replay & live demo",
+          "Reproduce forecasts, measure freshness, reset streaming state and document launch steps.",
+          "Not started",
+        ],
+      ];
+      phases.forEach((p, i) => {
+        const d = document.createElement("div");
+        d.className = "phase" + (i === 0 ? " current" : "");
+        d.innerHTML = `<div class="phase-num">${i}</div><div><h3>${p[0]}</h3><p>${p[1]}</p><small>${i === 0 ? "Entry: current research package" : i === 5 ? "Entry: stable Phase 4 baseline" : i === 6 ? "Entry: Phase 4; selected extensions optional" : `Entry: Phase ${i - 1} evidence gate`}</small></div><span class="status">${p[2]}</span>`;
+        $("phases").append(d);
+      });
+      function refresh() {
+        evidenceCache = evidence();
+        drawScene();
+        drawPipeline();
+        drawEvaluation();
+      }
+      [
+        "structures",
+        "moving",
+        "stopped",
+        "history",
+        "compensate",
+        "rays",
+        "forecast",
+        "horizon",
+      ].forEach((id) => on(id, "change", refresh));
+      ["threshold", "bias", "spread"].forEach((id) =>
+        on(id, "input", () => {
+          drawEvaluation();
+          drawScene();
+          drawPipeline();
+        }),
+      );
+      ["probability", "target", "valid"].forEach((id) =>
+        on(id, "input", drawLoss),
+      );
+      on("boxOffset", "input", drawTarget);
+      refresh();
+      drawTransform();
+      selectLayer(0);
+      drawFusion();
+      drawTarget();
+      drawLoss();
+      let mapLogOdds = 0;
+      function updateMapping(delta) {
+        mapLogOdds = Math.max(-4, Math.min(4, mapLogOdds + delta));
+        $("mapReadout").textContent =
+          `log odds = ${mapLogOdds.toFixed(3)} · p = ${(1 / (1 + Math.exp(-mapLogOdds))).toFixed(3)}`;
+      }
+      on("mapHit", "click", () => updateMapping(Math.log(0.7 / 0.3)));
+      on("mapFree", "click", () => updateMapping(Math.log(0.3 / 0.7)));
+      on("mapUnknown", "click", () => updateMapping(0));
+      on("mapReset", "click", () => {
+        mapLogOdds = 0;
+        updateMapping(0);
+      });
+      on("saveExample", "click", () => {
+        const { truth, probs, ...metrics } = computeMetrics();
+        const record = {
+          kind: "synthetic_teaching_example_not_model_results",
+          contract: CONTRACT.schema,
+          horizon_s: num("horizon"),
+          threshold: num("threshold"),
+          car_x_bias_at_2s_m: num("bias"),
+          spread_m: num("spread"),
+          moving_actors: checked("moving"),
+          stopped_actor: checked("stopped"),
+          valid_cells: 16384,
+          ...metrics,
+        };
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(record, null, 2)], {
+            type: "application/json",
+          }),
+        );
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "synthetic-occupancy-example.json";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+      // Pure helpers exposed for deterministic browser verification, not model inference.
+      window.companionChecks = {
+        contract: CONTRACT,
+        computeMetrics,
+        gridIndex,
+        local,
+        world,
+        rayBox,
+        truthAt,
+        getState: () => ({ ...state }),
+      };
+    </script>
+  </body>
+</html>

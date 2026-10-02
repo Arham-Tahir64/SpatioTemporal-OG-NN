@@ -1,12 +1,12 @@
 # Repository structure and source-of-truth policy
 
-The repository is the canonical home for project knowledge and reproducibility records. During planning it has only three entry documents, an offline visual companion and one documentation folder:
+The repository is the canonical home for project knowledge and reproducibility records. During planning it has only three entry documents, an offline visualizer folder and one documentation folder:
 
 ```text
 README.md       Project overview and next action
 LEARNING.md     Ordered resources and readiness exercises
 ROADMAP.md      Phases, tasks and completion gates
-companion.html  Self-contained interactive visual companion
+visualizer/     Editable offline playground; run instructions inside
 docs/           Detailed contracts, research, decisions and original proposal
 ```
 
